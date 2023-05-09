@@ -3,6 +3,7 @@ import { lazy } from 'react';
 // project imports
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
+import NotFound from 'views/pages/NotFound';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -84,6 +85,10 @@ const MainRoutes = {
         {
             path: 'sample-page',
             element: <SamplePage />
+        },
+        {
+            path: '*',
+            element: <NotFound />
         }
     ]
 };
