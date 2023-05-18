@@ -2,8 +2,9 @@ import { lazy } from 'react';
 
 // project imports
 import MainLayout from 'layout/MainLayout';
-import Loadable from 'ui-component/Loadable';
+import Loadable from 'components/Loadable';
 import NotFound from 'views/pages/NotFound';
+import ProjectsPage from 'views/pages/ProjectsPage';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -79,6 +80,15 @@ const MainRoutes = {
                 {
                     path: 'material-icons',
                     element: <UtilsMaterialIcons />
+                }
+            ]
+        },
+        {
+            path: 'content',
+            children: [
+                {
+                    path: 'projects',
+                    element: <ProjectsPage />
                 }
             ]
         },
