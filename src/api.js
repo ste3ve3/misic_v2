@@ -22,8 +22,8 @@ export const fetcher = async (path) => {
  *
  * @param {string} pathname
  */
-export const useFetcher = (pathname) => {
-    const { data, error, isLoading } = useSWR(pathname, fetcher);
+export const useFetcher = (pathname, opts) => {
+    const { data, error, isLoading } = useSWR(pathname, fetcher, opts);
     return {
         data,
         isLoading: isLoading || (!error && !data),

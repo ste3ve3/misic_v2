@@ -11,3 +11,17 @@ export const PROJECT_ERROR = 'PROJECT_ERROR';
 export const ADD_PROJECT = 'ADD_PROJECT';
 export const EDIT_PROJECT = 'EDIT_PROJECT';
 export const DELETE_PROJECT = 'DELETE_PROJECT';
+
+//Leaders
+export const GET_ALL_LEADERS = 'GET_ALL_LEADERS';
+export const LEADER_ERROR = 'LEADER_ERROR';
+export const ADD_LEADER = 'ADD_LEADER';
+export const EDIT_LEADER = 'EDIT_LEADER';
+export const DELETE_LEADER = 'DELETE_LEADER';
+
+//Blogs
+export const GET_ALL_BLOGS = 'GET_ALL_BLOGS';
+export const BLOG_ERROR = 'BLOG_ERROR';
+export const ADD_BLOG = 'ADD_BLOG';
+export const EDIT_BLOG = 'EDIT_BLOG';
+export const DELETE_BLOG = 'DELETE_BLOG';

@@ -2,7 +2,7 @@ import { Button, ButtonBase, Stack, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import { IconCameraPlus } from '@tabler/icons';
 
-const ChooseFileImage = ({ title, onSelect, selected, error }) => {
+const ChooseFileImage = ({ title, onSelect, selected, error, fullWidth = true }) => {
     const handleClickUpload = (e) => {
         // setError('');
         const input = document.getElementById('choose-file-upload');
@@ -35,7 +35,16 @@ const ChooseFileImage = ({ title, onSelect, selected, error }) => {
                 </Typography>
             )}
             {!selected && (
-                <ButtonBase onClick={handleClickUpload} sx={{ width: '100%' }}>
+                <ButtonBase
+                    onClick={handleClickUpload}
+                    sx={{
+                        width: {
+                            xs: '100%',
+                            sm: fullWidth ? '100%' : '50%',
+                            lg: fullWidth ? '100%' : '30%'
+                        }
+                    }}
+                >
                     <Stack
                         sx={{ height: 200, width: '100%', borderRadius: 3, border: 1 }}
                         justifyContent="center"

@@ -47,10 +47,8 @@ const IOSSwitch = styled((props) => <Switch focusVisibleClassName=".Mui-focusVis
     }
 }));
 
-const IosSwitch = ({ value, onChange }) => {
-    return (
-        <FormControlLabel control={<IOSSwitch sx={{ m: 1 }} checked={value} onChange={() => onChange(!value)} />} label="Is Sponsored" />
-    );
+const IosSwitch = ({ value, onChange, label }) => {
+    return <FormControlLabel control={<IOSSwitch sx={{ m: 1 }} checked={value} onChange={() => onChange(!value)} />} label={label} />;
 };
 
 export default IosSwitch;

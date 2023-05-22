@@ -14,15 +14,7 @@ import Sidebar from 'components/Global/Sidebar';
 import ProjectCard from 'components/cards/ProjectCard';
 import IosSwitch from 'components/extended/IosSwitch';
 import ProjectsLoaders from 'components/cards/Skeleton/ProjectsLoaders';
-
-function compareObj(obj1, obj2) {
-    return Object.entries(obj2).reduce((acc, [key, value]) => {
-        if (obj1[key] !== value) {
-            acc[key] = value;
-        }
-        return acc;
-    }, {});
-}
+import { compareObj } from 'utils/constants';
 
 const initFormData = {
     projectImage: '',
@@ -206,7 +198,7 @@ const ProjectsPage = ({ projects, paginationDetails, getProjects, addProject, ed
                         required
                     />
 
-                    <IosSwitch value={formData.isSponsored} onChange={(value) => handleChange('isSponsored', value)} />
+                    <IosSwitch value={formData.isSponsored} onChange={(value) => handleChange('isSponsored', value)} label="Is Sponsored" />
                 </Sidebar>
             </Stack>
             <DataWidget

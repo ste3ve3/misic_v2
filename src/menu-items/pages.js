@@ -1,5 +1,5 @@
 // assets
-import { IconKey, IconBrandAsana } from '@tabler/icons';
+import { IconKey, IconBrandAsana, IconBrandDisqus } from '@tabler/icons';
 
 // constant
 const icons = {
@@ -44,6 +44,14 @@ const pages = {
             url: '/content/projects',
             // target: true,
             icon: icons.IconBrandAsana,
+            type: 'item'
+        },
+        {
+            id: 'blogs',
+            title: 'Blogs',
+            url: '/content/blogs',
+            // target: true,
+            icon: IconBrandDisqus,
             type: 'item'
         }
     ]
