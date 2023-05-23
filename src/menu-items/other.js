@@ -19,10 +19,10 @@ const other = {
             breadcrumbs: false
         },
         {
-            id: 'documentation',
-            title: 'Documentation',
+            id: 'visit',
+            title: 'Visit Website',
             type: 'item',
-            url: 'https://codedthemes.gitbook.io/berry/',
+            url: 'https://cathedralesaintmichael.vercel.app/',
             icon: icons.IconHelp,
             external: true,
             target: true
