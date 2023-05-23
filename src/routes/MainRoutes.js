@@ -5,6 +5,10 @@ import MainLayout from 'layout/MainLayout';
 import Loadable from 'components/Loadable';
 import NotFound from 'views/pages/NotFound';
 import ProjectsPage from 'views/pages/ProjectsPage';
+import LeadersPage from 'views/dashboard/members/LeadersPage';
+import BlogsPage from 'views/pages/blog/BlogsPage';
+import AddBlogForm from 'components/blog/AddBlogForm';
+import EditBlog from 'views/pages/blog/EditBlog';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -33,50 +37,46 @@ const MainRoutes = {
             path: 'dashboard',
             children: [
                 {
-                    path: 'default',
+                    path: 'home',
                     element: <DashboardDefault />
                 }
             ]
         },
+        {
+            path: 'members',
+            children: [
+                {
+                    path: 'leaders',
+                    element: <LeadersPage />
+                }
+            ]
+        },
+
         {
             path: 'utils',
             children: [
                 {
                     path: 'util-typography',
                     element: <UtilsTypography />
-                }
-            ]
-        },
-        {
-            path: 'utils',
-            children: [
+                },
+                {
+                    path: 'util-shadow',
+                    element: <UtilsShadow />
+                },
                 {
                     path: 'util-color',
                     element: <UtilsColor />
                 }
             ]
         },
-        {
-            path: 'utils',
-            children: [
-                {
-                    path: 'util-shadow',
-                    element: <UtilsShadow />
-                }
-            ]
-        },
+
         {
             path: 'icons',
             children: [
                 {
                     path: 'tabler-icons',
                     element: <UtilsTablerIcons />
-                }
-            ]
-        },
-        {
-            path: 'icons',
-            children: [
+                },
                 {
                     path: 'material-icons',
                     element: <UtilsMaterialIcons />
@@ -86,6 +86,14 @@ const MainRoutes = {
         {
             path: 'content',
             children: [
+                {
+                    path: 'blogs',
+                    children: [
+                        { path: '', element: <BlogsPage /> },
+                        { path: 'new', element: <AddBlogForm /> },
+                        { path: 'edit', children: [{ path: ':slug', element: <EditBlog /> }] }
+                    ]
+                },
                 {
                     path: 'projects',
                     element: <ProjectsPage />

@@ -12,13 +12,11 @@ const DataWidget = ({ title, isLoading, isError = null, isEmpty, children, custo
         );
     }
     if (isError) {
-        const error = isError.message || isError.invalidToken;
-
         return (
             <Container sx={{ py: 2 }}>
                 <Alert severity="error" variant="outlined">
                     <AlertTitle>Error!</AlertTitle>
-                    {error || 'Oops, Something went wrong due to unknown error. Try to refresh the page and try again.'}
+                    {isError || 'Oops, Something went wrong due to unknown error. Try to refresh the page and try again.'}
                 </Alert>
             </Container>
         );

@@ -15,15 +15,23 @@ export default function Sidebar({
     openSidebar,
     onOpenSidebar,
     onCloseSidebar,
+    half,
     children,
     handleSubmit = () => {},
     title = 'Add Data',
-    state = {}
+    state = {},
+    hideButtonText = false
 }) {
     return (
         <>
-            <Button sx={{ mt: 2 }} onClick={onOpenSidebar} variant="outlined" startIcon={<IconCirclePlus />} color="secondary">
-                Create Project
+            <Button
+                sx={{ mt: 2, pl: hideButtonText ? 3 : undefined }}
+                onClick={onOpenSidebar}
+                variant="outlined"
+                startIcon={<IconCirclePlus />}
+                color="secondary"
+            >
+                {!hideButtonText && title}
             </Button>
 
             <Drawer
