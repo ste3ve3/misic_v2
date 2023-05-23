@@ -1,10 +1,11 @@
 // assets
-import { IconKey, IconBrandAsana, IconBrandDisqus } from '@tabler/icons';
+import { IconKey, IconBrandAsana, IconBrandDisqus, IconCalendar } from '@tabler/icons';
 
 // constant
 const icons = {
     IconKey,
-    IconBrandAsana
+    IconBrandAsana,
+    IconCalendar
 };
 
 // ==============================|| EXTRA PAGES MENU ITEMS ||============================== //
@@ -38,6 +39,14 @@ const pages = {
         //         }
         //     ]
         // },
+        {
+            id: 'calendar',
+            title: 'Calendar',
+            url: '/content/calendar',
+            // target: true,
+            icon: icons.IconCalendar,
+            type: 'item'
+        },
         {
             id: 'projects',
             title: 'Projects',

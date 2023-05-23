@@ -5,6 +5,7 @@ import MainLayout from 'layout/MainLayout';
 import Loadable from 'components/Loadable';
 import NotFound from 'views/pages/NotFound';
 import ProjectsPage from 'views/pages/ProjectsPage';
+import CalendarPage from 'views/pages/calendar/CalendarPage';
 import LeadersPage from 'views/dashboard/members/LeadersPage';
 import BlogsPage from 'views/pages/blog/BlogsPage';
 import AddBlogForm from 'components/blog/AddBlogForm';
@@ -97,6 +98,10 @@ const MainRoutes = {
                 {
                     path: 'projects',
                     element: <ProjectsPage />
+                },
+                {
+                    path: 'calendar',
+                    element: <CalendarPage />
                 }
             ]
         },

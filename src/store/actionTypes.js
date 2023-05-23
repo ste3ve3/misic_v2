@@ -25,3 +25,10 @@ export const BLOG_ERROR = 'BLOG_ERROR';
 export const ADD_BLOG = 'ADD_BLOG';
 export const EDIT_BLOG = 'EDIT_BLOG';
 export const DELETE_BLOG = 'DELETE_BLOG';
+
+//Calendar
+export const GET_ALL_EVENTS = 'GET_ALL_EVENTS';
+export const EVENT_ERROR = 'EVENT_ERROR';
+export const ADD_EVENT = 'ADD_EVENT';
+export const EDIT_EVENT = 'EDIT_EVENT';
+export const DELETE_EVENT = 'DELETE_EVENT';
