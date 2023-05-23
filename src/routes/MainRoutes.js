@@ -9,6 +9,7 @@ import LeadersPage from 'views/dashboard/members/LeadersPage';
 import BlogsPage from 'views/pages/blog/BlogsPage';
 import AddBlogForm from 'components/blog/AddBlogForm';
 import EditBlog from 'views/pages/blog/EditBlog';
+import TestimonialsPage from 'views/utilities/TestimonialsPage';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -53,19 +54,11 @@ const MainRoutes = {
         },
 
         {
-            path: 'utils',
+            path: 'activities',
             children: [
                 {
-                    path: 'util-typography',
-                    element: <UtilsTypography />
-                },
-                {
-                    path: 'util-shadow',
-                    element: <UtilsShadow />
-                },
-                {
-                    path: 'util-color',
-                    element: <UtilsColor />
+                    path: 'testimonials',
+                    element: <TestimonialsPage />
                 }
             ]
         },
