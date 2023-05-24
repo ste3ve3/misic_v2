@@ -1,10 +1,9 @@
-import { ADD_EVENT, DELETE_EVENT, EDIT_EVENT, GET_ALL_EVENTS, EVENT_ERROR } from '../actionTypes';
+import { ADD_EVENT, DELETE_EVENT, EDIT_EVENT, GET_ALL_EVENTS, EVENT_ERROR, HIGHLIGHT_EVENT } from '../actionTypes';
 
 const initEventtate = {
     error: null,
     events: [],
-    loading: true,
-    paginationDetails: null
+    loading: true
 };
 
 const eventReducer = (state = initEventtate, action) => {
@@ -23,6 +22,12 @@ const eventReducer = (state = initEventtate, action) => {
                 events: [action.payload.event, ...state.events]
             };
         case EDIT_EVENT:
+            return {
+                ...state,
+                error: null,
+                events: state.events.map((event) => (event._id !== action.payload.event._id ? event : action.payload.event))
+            };
+        case HIGHLIGHT_EVENT:
             return {
                 ...state,
                 error: null,

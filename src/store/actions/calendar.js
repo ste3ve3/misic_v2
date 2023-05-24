@@ -29,3 +29,10 @@ export const deleteEvent = (id) => ({
         id
     }
 });
+
+export const highlightEvent = (event) => ({
+    type: actions.HIGHLIGHT_EVENT,
+    payload: {
+        event
+    }
+});

@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Card, CardContent, Typography } from '@mui/material';
+import { Card, Stack, IconButton, CardContent, MenuItem, Popover, Typography, Button, CardHeader } from '@mui/material';
+import { IconEdit, IconTrash, IconDotsVertical, IconEye, IconEyeOff } from '@tabler/icons';
 
-const CalendarCard = ({ weekDay, weekActivities }) => {
+const CalendarCard = ({ weekDay, weekActivities, WeekDate, onClick, isActive, currentActivity, handleHighlightEvent, targettedEvent }) => {
+  const [openMenu, setOpenMenu] = useState(null);
+
+    const handleOpenMenu = (e) => {
+        setOpenMenu(e.target);
+    };
+    const handleCloseMenu = () => {
+        setOpenMenu(null);
+    };
+
   return (
     <Card
       style={{
@@ -20,7 +30,7 @@ const CalendarCard = ({ weekDay, weekActivities }) => {
           fontSize: '17px',
         }}
       >
-        {weekDay}
+        {weekDay} - {WeekDate}
       </div>
       <CardContent>
         {weekActivities.map((activity, index) => (
@@ -29,51 +39,120 @@ const CalendarCard = ({ weekDay, weekActivities }) => {
             style={{
               display: 'flex',
               flexDirection: 'column',
-              padding: '16px',
+              marginBottom: '10px',
               '&:hover': {
                 backgroundColor: '#E7FFFF',
               },
             }}
           >
-            <Typography
-              variant="body1"
-              style={{
-                whiteSpace: 'normal',
-                color: '#00b4d0',
-                wordBreak: 'break-word',
-                fontWeight: 'bold',
-              }}
+            <Stack 
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
             >
-              {activity.startingTime} - {activity.endingTime}
-            </Typography>
-            <Typography
-              variant="body1"
-              style={{
-                whiteSpace: 'normal',
-                color: 'black',
-                wordBreak: 'break-word',
-              }}
-            >
-              {activity.eventName}
-            </Typography>
-            {activity.hasDescription && (
-              <NavLink
-                to={`/events/${activity._id}`}
-                style={{
-                  whiteSpace: 'normal',
-                  color: '#00b4d0',
-                  wordBreak: 'break-word',
-                  fontSize: '14px',
-                  fontWeight: 'bold',
-                  textDecoration: 'underline',
-                }}
-              >
-                More
-              </NavLink>
-            )}
+              <Stack >
+                <Typography
+                  variant="body1"
+                  style={{
+                    whiteSpace: 'normal',
+                    color: '#00b4d0',
+                    wordBreak: 'break-word',
+                    fontWeight: 'bold',
+                    marginBottom: '1px'
+                  }}
+                >
+                  {activity.startingTime} - {activity.endingTime}
+                </Typography>
+                <Typography
+                  variant="body1"
+                  style={{
+                    whiteSpace: 'normal',
+                    color: 'black',
+                    wordBreak: 'break-word',
+                  }}
+                >
+                  {activity.eventName}
+                </Typography>
+              </Stack>
+              <CardHeader
+                    action={
+                        <IconButton
+                            aria-label="settings"
+                            onClick={(e) => {
+                                handleOpenMenu(e);
+                                currentActivity(activity);
+                            }}
+                        >
+                            <IconDotsVertical size={16} />
+                        </IconButton>
+                    }
+              />
+            </Stack>
+            
           </div>
         ))}
       </CardContent>
+      <Popover
+          open={Boolean(openMenu)}
+          anchorEl={openMenu}
+          onClose={handleCloseMenu}
+          anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+          PaperProps={{
+              sx: {
+                  p: 1,
+                  width: targettedEvent?.isHighlighted ? 120: 110,
+                  '& .MuiMenuItem-root': {
+                      px: 1,
+                      typography: 'body2',
+                      borderRadius: 0.75
+                  }
+              }
+          }}
+      >
+        <Stack 
+          alignItems="flex-start"
+              >
+              <Button
+                      size="small"
+                      color="secondary"
+                      disabled={isActive}
+                      startIcon={<IconEdit size={16} />}
+                      onClick={(event) => {
+                        onClick('edit')
+                        handleCloseMenu(event)
+                      }}
+                  >
+                    Edit
+              </Button>
+              <Button
+                  size="small"
+                  color="primary"
+                  disabled={isActive}
+                  startIcon={<IconTrash size={16} />}
+                  onClick={(event) => {
+                    onClick('delete')
+                    handleCloseMenu(event)
+                }}
+              >
+                Delete
+              </Button>
+              <Button
+                  size="small"
+                  style={{ color: 'green' }}
+                  disabled={isActive}
+                  startIcon={targettedEvent?.isHighlighted ? <IconEyeOff size={16} /> : <IconEye size={16} /> }
+                  onClick={(event) => {
+                    handleHighlightEvent(event)
+                    handleCloseMenu(event)
+                }}
+              >
+                {
+                  targettedEvent?.isHighlighted ? "Unhighlight" : "Highlight"
+                }
+              </Button>
+              </Stack> 
+      </Popover>
     </Card>
   );
 };

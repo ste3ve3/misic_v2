@@ -1,38 +1,41 @@
-import { Box, CardActions, Grid, Skeleton, Stack, TextField, Typography, IconButton } from '@mui/material';
+import { Button, Grid, Skeleton, Stack, TextField, Typography, IconButton } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { API, useFetcher } from 'api';
-import { addEvent, deleteEvent, editEvent, getAllEvents } from 'store/actions/calendar';
+import { addEvent, deleteEvent, editEvent, getAllEvents, highlightEvent } from 'store/actions/calendar';
 import { connect } from 'react-redux';
 import DataWidget from 'components/Global/DataWidget';
-import ProjectsLoaders from 'components/cards/Skeleton/ProjectsLoaders';
+import CalendarLoaders from 'components/cards/Skeleton/CalendarLoaders';
 import CalendarCard from './elements/CalendarCard';
 import { BsFillArrowLeftCircleFill, BsFillArrowRightCircleFill } from 'react-icons/bs';
+import { IconCirclePlus, IconCircleMinus, IconEditCircle } from '@tabler/icons';
 import Sidebar from 'components/Global/Sidebar';
 import ChooseFileImage from 'components/Global/ChooseFileImage';
 import DatePickerValue from 'components/Global/DatePicker';
 import { toast } from 'react-hot-toast';
 import { compareObj } from 'utils/constants';
+import { formattedDate } from 'utils/formatDate';
+import ModalDialog from 'components/Global/ModalDialog';
+import ReloadPageAfterTwoSeconds from 'utils/pageReload';
 
 const initFormData = {
     eventName: '',
     startingTime: '',
     endingTime: '',
-    eventDate: '',
-    eventImage: '',
-    eventLocation: '',
-    eventDescription: ''
-};
+    eventDate: ''
+  };
 
 const initState = { loading: false, error: null };
 
-const CalendarPage = ({ events, getEvents, addEvent, deleteEvent, editEvent }) => {
+const CalendarPage = ({ events, getEvents }) => {
     const [openSidebar, setOpenSidebar] = useState(false);
     const [formData, setFormData] = useState(initFormData);
     const [state, setState] = useState(initState);
     const [currentEvent, setCurrentEvent] = useState(null);
     const [current, setCurrent] = useState(0);
+    const [showDescription, setShowDescription] = useState(false)
+    const [pageRefresh, setPageRefresh] = useState(false)
     const { data, isError, isLoading } = useFetcher('/calendar');
-    const currentWeek = data?.calendarData[current]; 
+    const currentWeek = events[current]; 
 
     const handlePrevClick = () => {
         if (current !== 0) {
@@ -41,16 +44,16 @@ const CalendarPage = ({ events, getEvents, addEvent, deleteEvent, editEvent }) =
     };
 
     const handleNextClick = () => {
-        if (current < data.length - 1) {
+        if (current < data?.calendarData?.length - 1) {
             setCurrent(current + 1);
         }
     };
 
     useEffect(() => {
-        if (data?.data?.length) {
-            getEvents({ events: data?.data });
+        if (data?.calendarData?.length) { 
+            getEvents({ events: data?.calendarData });
         }
-    }, [data?.data?.length]);
+    }, [data?.calendarData?.length]);
 
     useEffect(() => {
         if (currentEvent) {
@@ -69,8 +72,26 @@ const CalendarPage = ({ events, getEvents, addEvent, deleteEvent, editEvent }) =
     }, [currentEvent]);
 
     const handleChange = (name, value) => {
-        setFormData((prev) => ({ ...prev, [name]: value }));
+        setFormData((prev) => {
+          const updatedFormData = { ...prev };
+      
+          if (name === 'eventDescription' || name === 'eventImage' || name === 'eventLocation') {
+            if (value === '') {
+              delete updatedFormData[name];
+              delete initFormData[name]; 
+            } else {
+              updatedFormData[name] = value; 
+              initFormData[name] = value;
+            }
+          } else {
+            updatedFormData[name] = value;
+            initFormData[name] = value;
+          }
+      
+          return updatedFormData;
+        });
     };
+      
 
     const handleSubmit = async () => {
         setState(initState);
@@ -86,13 +107,13 @@ const CalendarPage = ({ events, getEvents, addEvent, deleteEvent, editEvent }) =
                     API.patch(`/calendar/updateEvent?eventId=${currentEvent._id}`, newObj),
                     {
                         loading: `Updating event, please wait...`,
-                        success: `Event ${currentEvent.eventName} updated successfully!`,
+                        success: `Event updated successfully!`,
                         error: `Something went wrong while updating event`
                     },
-                    { position: 'top-right' }
+                    { position: 'top-center' }
                 );
-                editEvent(result.data.data);
-                setCurrentEvent(null);
+                setCurrentEvent(null); 
+                setPageRefresh(true);  
             } else {
                 const result = await toast.promise(
                     API.post(`/calendar/add`, formData),
@@ -101,9 +122,9 @@ const CalendarPage = ({ events, getEvents, addEvent, deleteEvent, editEvent }) =
                         success: `Event added successfully!`,
                         error: `Something went wrong while adding event`
                     },
-                    { position: 'top-right' }
+                    { position: 'top-center' }
                 );
-                addEvent(result.data.data);
+                setPageRefresh(true);
             }
             setFormData(initFormData);
             setOpenSidebar(false);
@@ -136,6 +157,31 @@ const CalendarPage = ({ events, getEvents, addEvent, deleteEvent, editEvent }) =
         setCurrentEvent(null);
     };
 
+    const highlightEvent = async () => {
+        const id = currentEvent?._id;
+        let payload;
+        currentEvent?.isHighlighted ? payload = { isHighlighted: false } : payload = { isHighlighted: true }
+        try {
+            const result = await toast.promise(API.patch(`/calendar/highlightEvent?eventId=${id}`, payload), {
+                loading: currentEvent?.isHighlighted ? `Hold on, we are unhighlighting this event.` : `Hold on, we are highlighting this event.`,
+                success: currentEvent?.isHighlighted ? `Event unhighlighted successfully` : `Event highlighted successfully`,
+                error: (error) => {
+                    if (error.response) {
+                        return `Error: ${error.response?.data?.message || error.message || 'Unknown error occured'}`;
+                    } else {
+                        return 'Something went wrong while highlighting this event, please try again';
+                    }
+                }
+            });
+            setPageRefresh(true);
+        } catch (error) {
+        }
+    }
+
+    if(pageRefresh) {
+        return <ReloadPageAfterTwoSeconds />
+    }
+
     return (
         <div>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -163,13 +209,7 @@ const CalendarPage = ({ events, getEvents, addEvent, deleteEvent, editEvent }) =
                         label="Event Date"
                         value={formData.eventDate}
                         onChange={(val) => {
-                            const eventDate = new Date(val.$d);
-                            const formattedDate = eventDate.toLocaleDateString('en-US', {
-                            month: 'long',
-                            day: 'numeric',
-                            year: 'numeric'
-                            });
-                            handleChange('eventDate', formattedDate);
+                            handleChange('eventDate', formattedDate(val.$d));
                         }}
                     />
                     <TextField
@@ -188,27 +228,43 @@ const CalendarPage = ({ events, getEvents, addEvent, deleteEvent, editEvent }) =
                         fullWidth
                         required
                     />
-                    <ChooseFileImage
-                        title="Event Image"
-                        selected={formData.eventImage}
-                        onSelect={(selected) => handleChange('eventImage', selected)}
-                    />
-                    <TextField
-                        label="Event Location"
+                    <Button
+                        onClick={(prev) => setShowDescription(!showDescription)}
+                        variant="outlined"
+                        startIcon={showDescription ? <IconCircleMinus /> : currentEvent ? <IconEditCircle /> : <IconCirclePlus />}
                         color="secondary"
-                        value={formData.eventLocation}
-                        onChange={(e) => handleChange('eventLocation', e.target.value)}
-                        fullWidth
-                    />
-                    <TextField
-                        label="Event Description"
-                        color="secondary"
-                        value={formData.eventDescription}
-                        onChange={(e) => handleChange('eventDescription', e.target.value)}
-                        multiline
-                        rows={6}
-                        fullWidth
-                    />
+                    >
+                      {
+                        showDescription ? "Hide Description" :
+                        currentEvent ? 'Update Description' : 'Add Description'
+                      }    
+                    </Button>
+                    {
+                    showDescription &&
+                    <>
+                        <ChooseFileImage
+                            title="Event Image"
+                            selected={formData.eventImage}
+                            onSelect={(selected) => handleChange('eventImage', selected)}
+                        />
+                        <TextField
+                            label="Event Location"
+                            color="secondary"
+                            value={formData.eventLocation}
+                            onChange={(e) => handleChange('eventLocation', e.target.value)}
+                            fullWidth
+                        />
+                        <TextField
+                            label="Event Description"
+                            color="secondary"
+                            value={formData.eventDescription}
+                            onChange={(e) => handleChange('eventDescription', e.target.value ? e.target.value : '')}
+                            multiline
+                            rows={6}
+                            fullWidth
+                        />
+                    </>
+                    }
                 </Sidebar>
             </Stack>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '50px' }}>
@@ -238,21 +294,61 @@ const CalendarPage = ({ events, getEvents, addEvent, deleteEvent, editEvent }) =
             </div>
             <DataWidget
                 title="Events"
-                isLoading={isLoading && !data?.calendarData?.length} 
-                isError={isError && !data?.calendarData?.length}
-                isEmpty={!data?.calendarData?.length}
-                customLoaders={<ProjectsLoaders />}
+                isLoading={isLoading && !events?.length} 
+                isError={isError && !events?.length}
+                isEmpty={!events?.length}
+                customLoaders={<CalendarLoaders />}
             >
                 <Grid container spacing={3} sx={{ my: 1 }}>
                     {currentWeek?.days?.map((weekDay, index) => {
                         return (
-                            <Grid key={index} item xs={12} sm={6} md={5}>
-                            <CalendarCard weekDay={weekDay.day} weekActivities={weekDay.events} />
+                            <Grid key={index} item xs={12} sm={6} md={4}>
+                            <CalendarCard 
+                                weekDay={weekDay.day} 
+                                WeekDate={weekDay.date}
+                                weekActivities={weekDay.events} 
+                                onClick={(action) => {
+                                    action === 'edit' ? handleOpenSidebar() : handleOpenModal();
+                                }}
+                                currentActivity={(activity) => {
+                                    setCurrentEvent(activity);
+                                }}
+                                handleHighlightEvent={highlightEvent}
+                                targettedEvent={currentEvent}
+                            />
                             </Grid>
                         );
                     })}
                 </Grid>
             </DataWidget>
+            <ModalDialog
+                title="Delete Event?"
+                subTitle={`Are you sure you want to delete this event? `}
+                item={currentEvent?.eventName}
+                open={openModal}
+                handleClose={handleCloseModal}
+                handleClickOk={async () => {
+                    const id = currentEvent?._id;
+                    setOpenModal(false);
+                    try {
+                        await toast.promise(API.delete(`/calendar/deleteEvent?eventId=${id}`), {
+                            loading: `Hold on, we are deleting this event from our system.`,
+                            success: `Event deleted successfully`,
+                            error: (error) => {
+                                if (error.response) {
+                                    return `Error: ${error.response?.data?.message || error.message || 'Unknown error occured'}`;
+                                } else {
+                                    return 'Something went wrong while deleting this event, please try again';
+                                }
+                            }
+                        });
+                        setPageRefresh(true);
+                    } catch (error) {
+                    } finally {
+                        handleCloseModal();
+                    }
+                }}
+            />
         </div>
     );
 };
@@ -263,7 +359,11 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getEvents: (data) => dispatch(getAllEvents(data))
+        getEvents: (data) => dispatch(getAllEvents(data)),
+        addEvent: (data) => dispatch(addEvent(data)),
+        deleteEvent: (id) => dispatch(deleteEvent(id)),
+        editEvent: (data) => dispatch(editEvent(data)),
+        eventHighlight: (data) => dispatch(highlightEvent(data))
     };
 };
 

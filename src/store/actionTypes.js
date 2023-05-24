@@ -32,3 +32,4 @@ export const EVENT_ERROR = 'EVENT_ERROR';
 export const ADD_EVENT = 'ADD_EVENT';
 export const EDIT_EVENT = 'EDIT_EVENT';
 export const DELETE_EVENT = 'DELETE_EVENT';
+export const HIGHLIGHT_EVENT = 'HIGHLIGHT_EVENT';
