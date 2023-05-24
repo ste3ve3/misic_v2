@@ -19,6 +19,13 @@ export const ADD_TESTIMONIAL = 'ADD_TESTIMONIAL';
 export const EDIT_TESTIMONIAL = 'EDIT_TESTIMONIAL';
 export const DELETE_TESTIMONIAL = 'DELETE_TESTIMONIAL';
 
+//Fathers
+export const GET_ALL_FATHERS = 'GET_ALL_FATHERS';
+export const FATHER_ERROR = 'FATHER_ERROR';
+export const ADD_FATHER = 'ADD_FATHER';
+export const EDIT_FATHER = 'EDIT_FATHER';
+export const DELETE_FATHER = 'DELETE_FATHER';
+
 //Leaders
 export const GET_ALL_LEADERS = 'GET_ALL_LEADERS';
 export const LEADER_ERROR = 'LEADER_ERROR';

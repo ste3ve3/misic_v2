@@ -10,6 +10,7 @@ import BlogsPage from 'views/pages/blog/BlogsPage';
 import AddBlogForm from 'components/blog/AddBlogForm';
 import EditBlog from 'views/pages/blog/EditBlog';
 import TestimonialsPage from 'views/utilities/TestimonialsPage';
+import FathersPage from 'views/dashboard/members/FathersPage';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -49,6 +50,10 @@ const MainRoutes = {
                 {
                     path: 'leaders',
                     element: <LeadersPage />
+                },
+                {
+                    path: 'fathers',
+                    element: <FathersPage />
                 }
             ]
         },

@@ -12,46 +12,46 @@ import Sidebar from 'components/Global/Sidebar';
 import IosSwitch from 'components/extended/IosSwitch';
 import ProjectsLoaders from 'components/cards/Skeleton/ProjectsLoaders';
 import { compareObj } from 'utils/constants';
-import { addTestimonial, deleteTestimonial, editTestimonial, getAllTestimonials } from 'store/actions/testimonial';
 import TestimonialCard from 'components/cards/TestimonialCard';
+import { addFather, deleteFather, editFather, getAllFathers } from 'store/actions/father';
 
 const initFormData = {
     name: '',
     role: '',
-    testimonial: '',
+    background: '',
     image: '',
     isPublic: true
 };
 
 const initState = { loading: false, error: null };
 
-const TestimonialsPage = ({ testimonials, paginationDetails, getTestimonials, addTestimonial, editTestimonial, deleteTestimonial }) => {
+const FathersPage = ({ fathers, getFathers, addFather, editFather, deleteFather }) => {
     const [openSidebar, setOpenSidebar] = useState(false);
     const [formData, setFormData] = useState(initFormData);
     const [state, setState] = useState(initState);
-    const [currentTestimonial, setCurrentTestimonial] = useState(null);
+    const [currentFather, setCurrentFather] = useState(null);
 
-    const { data, isError, isLoading } = useFetcher('/testimonials?all=true');
+    const { data, isError, isLoading } = useFetcher('/priests?all=true');
 
     useEffect(() => {
         if (data?.data?.length) {
-            getTestimonials({ testimonials: data?.data, paginationDetails: data?.paginationDetails });
+            getFathers({ fathers: data?.data });
         }
     }, [data?.data?.length]);
 
     useEffect(() => {
-        if (currentTestimonial) {
+        if (currentFather) {
             setFormData({
-                image: currentTestimonial.image,
-                isPublic: currentTestimonial.isPublic,
-                role: currentTestimonial.role,
-                testimonial: currentTestimonial.testimonial,
-                name: currentTestimonial.name
+                image: currentFather.image,
+                isPublic: currentFather.isPublic,
+                role: currentFather.role,
+                background: currentFather.background,
+                name: currentFather.name
             });
         } else {
             setFormData(initFormData);
         }
-    }, [currentTestimonial]);
+    }, [currentFather]);
 
     const handleChange = (name, value) => {
         setFormData((prev) => ({ ...prev, [name]: value }));
@@ -61,34 +61,34 @@ const TestimonialsPage = ({ testimonials, paginationDetails, getTestimonials, ad
         setState(initState);
         try {
             setState((prev) => ({ ...prev, loading: true }));
-            if (currentTestimonial) {
-                const newObj = compareObj(currentTestimonial, formData);
+            if (currentFather) {
+                const newObj = compareObj(currentFather, formData);
                 if (!Object.keys(newObj).length) {
                     toast.error('No changes made', { position: 'top-right' });
                     return;
                 }
                 const result = await toast.promise(
-                    API.patch(`/testimonials/updateTestimonial?testimonialId=${currentTestimonial._id}`, newObj),
+                    API.patch(`/priests/updatePriest?priestId=${currentFather._id}`, newObj),
                     {
-                        loading: `Updating testimonial, please wait...`,
-                        success: `Testimonial ${currentTestimonial.name} updated successfully!`,
-                        error: `Something went wrong while updating testimonial`
+                        loading: `Updating priest, please wait...`,
+                        success: `Priest ${currentFather.name} updated successfully!`,
+                        error: `Something went wrong while updating priest`
                     },
                     { position: 'top-right' }
                 );
-                editTestimonial(result.data.data);
-                setCurrentTestimonial(null);
+                editFather(result.data.data);
+                setCurrentFather(null);
             } else {
                 const result = await toast.promise(
-                    API.post(`/testimonials/create`, formData),
+                    API.post(`/priests/create`, formData),
                     {
-                        loading: `Adding testimonial, please wait...`,
-                        success: `Testimonial added successfully!`,
-                        error: `Something went wrong while adding testimonial`
+                        loading: `Adding priest, please wait...`,
+                        success: `Priest added successfully!`,
+                        error: `Something went wrong while adding priest`
                     },
                     { position: 'top-right' }
                 );
-                addTestimonial(result.data.data);
+                addFather(result.data.data);
             }
             setFormData(initFormData);
             setOpenSidebar(false);
@@ -107,7 +107,7 @@ const TestimonialsPage = ({ testimonials, paginationDetails, getTestimonials, ad
     const handleCloseSidebar = () => {
         if (state.loading) return;
         setOpenSidebar(false);
-        setCurrentTestimonial(null);
+        setCurrentFather(null);
         setState(initState);
     };
 
@@ -117,18 +117,18 @@ const TestimonialsPage = ({ testimonials, paginationDetails, getTestimonials, ad
     };
     const handleCloseModal = () => {
         setOpenModal(false);
-        setCurrentTestimonial(null);
+        setCurrentFather(null);
     };
 
     return (
         <div>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
-                <Typography variant="h3">Testimonials</Typography>
+                <Typography variant="h3">Priests</Typography>
                 <Sidebar
-                    title={currentTestimonial ? 'Update Testimonial' : 'New Testimonial'}
+                    title={currentFather ? 'Update Priest' : 'New Priest'}
                     openSidebar={openSidebar}
                     onOpenSidebar={() => {
-                        setCurrentTestimonial(null);
+                        setCurrentFather(null);
                         handleOpenSidebar();
                     }}
                     onCloseSidebar={handleCloseSidebar}
@@ -144,7 +144,7 @@ const TestimonialsPage = ({ testimonials, paginationDetails, getTestimonials, ad
                         required
                     />
                     <TextField
-                        label="Relation to Church"
+                        label="Role"
                         color="secondary"
                         value={formData.role}
                         onChange={(e) => handleChange('role', e.target.value)}
@@ -152,12 +152,12 @@ const TestimonialsPage = ({ testimonials, paginationDetails, getTestimonials, ad
                         required
                     />
                     <TextField
-                        label="Testimonial"
+                        label="Background"
                         color="secondary"
                         multiline
-                        rows={6}
-                        value={formData.testimonial}
-                        onChange={(e) => handleChange('testimonial', e.target.value)}
+                        rows={10}
+                        value={formData.background}
+                        onChange={(e) => handleChange('background', e.target.value)}
                         fullWidth
                         required
                     />
@@ -167,21 +167,21 @@ const TestimonialsPage = ({ testimonials, paginationDetails, getTestimonials, ad
                 </Sidebar>
             </Stack>
             <DataWidget
-                title="Testimonials"
-                isLoading={isLoading && !testimonials.length}
-                isError={isError && !testimonials.length}
-                isEmpty={!testimonials.length}
+                title="Priests"
+                isLoading={isLoading && !fathers.length}
+                isError={isError && !fathers.length}
+                isEmpty={!fathers.length}
                 customLoaders={<ProjectsLoaders />}
             >
                 <Grid container spacing={3} sx={{ my: 1 }}>
-                    {testimonials.map((testimonial, index) => {
+                    {fathers.map((father, index) => {
                         return (
                             <Grid key={index} item xs={12} sm={6} md={3}>
                                 <TestimonialCard
-                                    testimonial={testimonial}
-                                    isActive={currentTestimonial?._id === testimonial._id}
+                                    testimonial={{ ...father, testimonial: father.role }}
+                                    isActive={currentFather?._id === father._id}
                                     onClick={(action) => {
-                                        setCurrentTestimonial(testimonial);
+                                        setCurrentFather(father);
                                         action === 'edit' ? handleOpenSidebar() : handleOpenModal();
                                     }}
                                 />
@@ -191,28 +191,28 @@ const TestimonialsPage = ({ testimonials, paginationDetails, getTestimonials, ad
                 </Grid>
             </DataWidget>
             <ModalDialog
-                title="Delete Testimonial?"
-                subTitle={`Are you sure do you want to delete this testimonial? `}
-                item={currentTestimonial?.name}
+                title="Delete Priest?"
+                subTitle={`Are you sure do you want to delete this priest? `}
+                item={currentFather?.name}
                 open={openModal}
                 handleClose={handleCloseModal}
                 handleClickOk={async () => {
-                    const id = currentTestimonial?._id;
-                    const title = currentTestimonial?.name;
+                    const id = currentFather?._id;
+                    const title = currentFather?.name;
                     setOpenModal(false);
                     try {
-                        await toast.promise(API.delete(`/testimonials/delete?testimonialId=${id}`), {
+                        await toast.promise(API.delete(`/priests/delete?priestId=${id}`), {
                             loading: `Hold on, we are deleting ${title} from our system.`,
-                            success: `Testimonial ${title} has been deleted successfully`,
+                            success: `Priest ${title} has been deleted successfully`,
                             error: (error) => {
                                 if (error.response) {
                                     return `Error: ${error.response?.data?.message || error.message || 'Unknown error occured'}`;
                                 } else {
-                                    return 'Something went wrong while deleting testimonial, please try again';
+                                    return 'Something went wrong while deleting priest, please try again';
                                 }
                             }
                         });
-                        deleteTestimonial(id);
+                        deleteFather(id);
                     } catch (error) {
                     } finally {
                         handleCloseModal();
@@ -224,17 +224,16 @@ const TestimonialsPage = ({ testimonials, paginationDetails, getTestimonials, ad
 };
 
 const mapStateToProps = (state) => ({
-    testimonials: state.testimonial.testimonials,
-    paginationDetails: state.testimonial.paginationDetails
+    fathers: state.father.fathers
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getTestimonials: (data) => dispatch(getAllTestimonials(data)),
-        addTestimonial: (data) => dispatch(addTestimonial(data)),
-        deleteTestimonial: (id) => dispatch(deleteTestimonial(id)),
-        editTestimonial: (data) => dispatch(editTestimonial(data))
+        getFathers: (data) => dispatch(getAllFathers(data)),
+        addFather: (data) => dispatch(addFather(data)),
+        deleteFather: (id) => dispatch(deleteFather(id)),
+        editFather: (data) => dispatch(editFather(data))
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TestimonialsPage);
+export default connect(mapStateToProps, mapDispatchToProps)(FathersPage);
