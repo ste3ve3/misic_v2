@@ -6,6 +6,7 @@ import projectReducer from './projectReducer';
 import leaderReducer from './leaderReducer';
 import blogReducer from './blogReducer';
 import eventReducer from './calendarReducer';
+import authReducer from './authReducer';
 
 // ==============================|| COMBINE REDUCER ||============================== //
 
@@ -14,7 +15,8 @@ const reducer = combineReducers({
     project: projectReducer,
     leader: leaderReducer,
     blog: blogReducer,
-    calendar: eventReducer
+    calendar: eventReducer,
+    auth: authReducer
 });
 
 export default reducer;

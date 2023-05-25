@@ -95,7 +95,10 @@ const CalendarCard = ({ weekDay, weekActivities, WeekDate, onClick, isActive, cu
       <Popover
           open={Boolean(openMenu)}
           anchorEl={openMenu}
-          onClose={handleCloseMenu}
+          onClose={(e) => {
+            handleCloseMenu(e)
+            currentActivity(null);
+          }}
           anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
           transformOrigin={{ vertical: 'top', horizontal: 'right' }}
           PaperProps={{

@@ -33,3 +33,9 @@ export const ADD_EVENT = 'ADD_EVENT';
 export const EDIT_EVENT = 'EDIT_EVENT';
 export const DELETE_EVENT = 'DELETE_EVENT';
 export const HIGHLIGHT_EVENT = 'HIGHLIGHT_EVENT';
+
+//Authentication
+export const GET_LOGGEDIN_USER = 'GET_LOGGEDIN_USER';
+export const GET_ALL_USERS = 'GET_ALL_USERS';
+export const EDIT_USER = 'EDIT_USER';
+export const DELETE_USER = 'DELETE_USER';
