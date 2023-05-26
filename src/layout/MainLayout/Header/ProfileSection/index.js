@@ -67,9 +67,9 @@ const ProfileSection = ({ loggedInUser, getUser }) => {
     useEffect(() => {
         if (!isLoading && isError) {
           navigate('/login');
+          window.location.reload();
         }
       }, [isLoading, isError]);
-       
     
     const handleLogout = async (e) => {
         e.preventDefault();

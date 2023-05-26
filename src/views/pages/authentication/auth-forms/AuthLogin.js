@@ -54,7 +54,7 @@ const FirebaseLogin = ({ ...others }) => {
         try {
             setState((prev) => ({ ...prev, loading: true }));
                 await toast.promise(
-                    API.post(`/auth/loginUser`, formData),
+                    API.post(`/auth/loginUser?isDashboardAuth=true`, formData),
                     {
                         loading: `Checking credentials, please wait...`,
                         success: `Logged In Successfully!`,
@@ -91,7 +91,7 @@ const FirebaseLogin = ({ ...others }) => {
             try {
                 setState((prev) => ({ ...prev, googleLoading: true }));
                     await toast.promise(
-                        API.post(`/auth/googleAuth`, data),
+                        API.post(`/auth/googleAuth?isDashboardAuth=true`, data),
                         {
                             loading: `Checking credentials, please wait...`,
                             success: `Logged In Successfully!`,

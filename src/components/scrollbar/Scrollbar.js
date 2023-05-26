@@ -2,8 +2,6 @@ import PropTypes from 'prop-types';
 import { memo } from 'react';
 // @mui
 import { Box } from '@mui/material';
-//
-import { StyledRootScrollbar, StyledScrollbar } from './styles';
 
 // ----------------------------------------------------------------------
 
@@ -19,18 +17,16 @@ function Scrollbar({ children, sx, ...other }) {
 
   if (isMobile) {
     return (
-      <Box sx={{ overflowX: 'auto', ...sx }} {...other}>
+      <Box sx={{ overflowX: 'auto', ...sx, }} {...other}>
         {children}
       </Box>
     );
   }
 
   return (
-    <StyledRootScrollbar>
-      <StyledScrollbar timeout={500} clickOnTrack={false} sx={sx} {...other}>
+    <Box sx={{ overflowX: 'auto', ...sx, }} {...other}>
         {children}
-      </StyledScrollbar>
-    </StyledRootScrollbar>
+    </Box>
   );
 }
 

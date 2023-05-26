@@ -15,20 +15,10 @@ import {
 import React, { useMemo, useState } from 'react';
 import Iconify from 'components/iconify/Iconify';
 import ModalDialog from 'components/Global/ModalDialog';
-export const LEVELS = {
-  user: 0,
-  admin: 1,
-  finance_admin: 2,
-  registrar_admin: 2,
-  super_admin: 3,
-};
 
 export const ROLES = [
   { label: 'User', value: 'user' },
   { label: 'Admin', value: 'admin' },
-  { label: 'Finance', value: 'finance_admin' },
-  { label: 'Registrar', value: 'registrar_admin' },
-  { label: 'Super Admin', value: 'super_admin' },
 ];
 //------------------------------------------------------------------------------
 
@@ -38,7 +28,6 @@ const UserListTile = ({
   onCheckBoxClicked,
   editRole,
   currentUserId,
-  currentUserRole,
   deleteUser,
 }) => {
   const {
@@ -79,6 +68,7 @@ const UserListTile = ({
   });
   const handleOpenModal = action => {
     setOpenModal({ show: true, action });
+    handleCloseMenu();
   };
   const handleCloseModal = () => {
     setOpenModal({ show: false, action: null });
@@ -133,9 +123,7 @@ const UserListTile = ({
               label="Select Role"
               required
               disabled={
-                currentUserId === id ||
-                currentUserRole != 'super_admin' ||
-                currentRole === 'super_admin'
+                currentUserId === id
               }
             >
               {ROLES.map((role, index) => {
@@ -143,7 +131,6 @@ const UserListTile = ({
                   <MenuItem
                     value={role.value}
                     key={index}
-                    disabled={role.value === 'super_admin'}
                   >
                     {role.label}
                   </MenuItem>
@@ -183,10 +170,7 @@ const UserListTile = ({
       >
         <MenuItem
           sx={{ color: 'error.main' }}
-          disabled={
-            currentUserId === id ||
-            LEVELS[currentUserRole] <= LEVELS[role]
-          }
+          disabled={currentUserId === id}
           onClick={() => handleOpenModal('DELETE')}
         >
           <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
@@ -202,12 +186,7 @@ const UserListTile = ({
         subTitle={
           openModal.action === 'DELETE'
             ? `Are you sure do you want to delete this user? He won't be able to login using this account!`
-            : `This action will change what a user can or can't access on RUPi Platform!`
-        }
-        hardWarning={
-          openModal.action === 'DELETE'
-            ? null
-            : `Are you sure do you want to change ${names}'s role from ${role} to ${currentRole}`
+            : `This action will change what a user can or can't access on Cathedrale Saint Michael Platform!`
         }
         open={openModal.show}
         handleClose={handleCloseModal}

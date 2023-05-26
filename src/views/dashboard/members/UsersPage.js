@@ -1,4 +1,3 @@
-import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
 // @mui
 import {
@@ -11,7 +10,6 @@ import {
   TableCell,
   Container,
   Typography,
-  Alert,
   TableContainer,
   TablePagination,
 } from '@mui/material';
@@ -26,12 +24,12 @@ import {
 import { API, useFetcher } from 'api';
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import { toast } from 'react-hot-toast';
 import {
   getUsers,
   deleteUser,
   editRole,
 } from 'store/actions/auth';
-import { DELETE_USER } from 'store/actionTypes';
 import DataWidget from 'components/Global/DataWidget';
 
 // ----------------------------------------------------------------------
@@ -74,7 +72,7 @@ function applySortFilter(array, comparator, query) {
     return filter(
       array,
       _user =>
-        _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1,
+        _user.names.toLowerCase().indexOf(query.toLowerCase()) !== -1,
     );
   }
   return stabilizedThis.map(el => el[0]);
@@ -85,12 +83,9 @@ const initState = { loading: false, error: null };
 const UsersPage = ({
   users,
   getUsers,
-//   deleteUser,
-//   message,
-//   editRole,
-//   loading,
-//   error,
-//   currentUser,
+  deleteUser,
+  editRole,
+  currentUser,
 }) => {
 
   const { data, isError, isLoading } = useFetcher('/auth/getAllUsers');
@@ -107,17 +102,8 @@ const UsersPage = ({
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const [success, setSuccess] = useState('');
-
   const [state, setState] = useState(initState);
-
-//   useEffect(() => {
-//     if (users.length === 0) {
-//       getUsers();
-//     }
-//   }, []);
-
-  console.log(data);    
+   
   useEffect(() => {
       if (data?.registeredUsers?.length) {
           getUsers({ users: data?.registeredUsers });
@@ -157,6 +143,56 @@ const UsersPage = ({
     setSelected(newSelected);
   };
 
+  const editUserRole = async (id, role) => {
+    setState(initState);
+    try {
+        setState((prev) => ({ ...prev, loading: true }));
+            const result = await toast.promise(
+                API.patch(`/auth/assignUserRole?userId=${id}`, role),
+                {
+                    loading: `Updating user, please wait...`,
+                    success: `Role updated successfully!`,
+                    error: `Something went wrong while updating the user role, please try again!`
+                },
+                { position: 'top-center' }
+            );
+            editRole(result.data.updatedUser);
+    } catch (error) {
+        setState((prev) => ({
+            ...prev,
+            error: error.response?.data?.message || error.message || 'Unknown error occured, please try again.'
+        }));
+    } finally {
+        setState((prev) => ({ ...prev, loading: false }));
+    }
+  };
+
+  const handleDeleteUser = async (id) => {
+      setState(initState);
+      try {
+          setState((prev) => ({ ...prev, loading: true }));
+          await toast.promise(API.delete(`/auth/deleteUser?userId=${id}`), {
+              loading: `Hold on, we are deleting this user from our system.`,
+              success: `User deleted successfully`,
+              error: (error) => {
+                  if (error.response) {
+                      return `Error: ${error.response?.data?.message || error.message || 'Unknown error occured'}`;
+                  } else {
+                      return 'Something went wrong while deleting project, please try again';
+                  }
+              }
+          });
+          deleteUser(id);
+      } catch (error) {
+        setState((prev) => ({
+          ...prev,
+          error: error.response?.data?.message || error.message || 'Unknown error occured, please try again.'
+      }));
+      } finally {
+          setState((prev) => ({ ...prev, loading: false }));
+      }
+  }
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -171,12 +207,6 @@ const UsersPage = ({
     setFilterName(event.target.value);
   };
 
-//   useEffect(() => {
-//     if (message?.action === DELETE_USER) {
-//       setSuccess(message.success);
-//     }
-//   }, [message]);
-
   const emptyRows =
     page > 0
       ? Math.max(0, (1 + page) * rowsPerPage - users?.length)
@@ -190,40 +220,26 @@ const UsersPage = ({
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
-  const [openAuthorSidebar, setOpenAuthorSidebar] = useState(false);
-
-  const handleOpenAuthorSidebar = () => {
-    setOpenAuthorSidebar(true);
-  };
-
-  const handleCloseAuthorSidebar = () => {
-    setOpenAuthorSidebar(false);
-  };
 
   return (
     <>
-      {/* <Helmet>
-        <title> Users | RUPI Admin</title>
-      </Helmet> */}
-
       <Container>
-        {success && (
-          <Alert variant="standard" severity="success" sx={{ mt: 2 }}>
-            {success}
-          </Alert>
-        )}
         <Stack
           direction="row"
           alignItems="center"
           justifyContent="space-between"
-          mb={5}
+          mb={4}
         >
-          <Typography variant="h4" gutterBottom>
+          <Typography variant="h3" gutterBottom>
             Users
           </Typography>
         </Stack>
 
-        <Card>
+        <Card
+        style={{
+          boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+        }}
+        >
           <DataWidget
             title={'Users'}
             isLoading={isLoading && !users?.length && !isError}
@@ -239,7 +255,7 @@ const UsersPage = ({
             />
 
             <Scrollbar>
-              <TableContainer sx={{ minWidth: 800 }}>
+              <TableContainer sx={{ minWidth: 800, overflowX: 'hidden' }}>
                 <Table>
                   <UserListHead
                     order={order}
@@ -268,10 +284,10 @@ const UsersPage = ({
                             onCheckBoxClicked={event =>
                               handleClick(event, row.name)
                             }
-                            editRole={editRole}
-                            // currentUserId={currentUser._id}
+                            editRole={editUserRole}
+                            currentUserId={currentUser._id}
                             // currentUserRole={currentUser.role}
-                            deleteUser={deleteUser}
+                            deleteUser={handleDeleteUser}
                           />
                         );
                       })}
@@ -334,7 +350,8 @@ const UsersPage = ({
 };
 
 const mapStateToProps = state => ({
-  users: state.auth.users
+  users: state.auth.users,
+  currentUser: state.auth.loggedInUser,
 });
 
 const mapDispatchToProps = dispatch => {

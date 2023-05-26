@@ -17,10 +17,10 @@ export const getUsers = ({ users = [] }) => {
         }
     };
 };
-export const editRole = (project) => ({
+export const editRole = (user) => ({
     type: actions.EDIT_USER,
     payload: {
-        project
+        user
     }
 });
 export const deleteUser = (id) => ({
