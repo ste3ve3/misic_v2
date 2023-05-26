@@ -12,6 +12,37 @@ export const ADD_PROJECT = 'ADD_PROJECT';
 export const EDIT_PROJECT = 'EDIT_PROJECT';
 export const DELETE_PROJECT = 'DELETE_PROJECT';
 
+//Testimonials
+export const GET_ALL_TESTIMONIALS = 'GET_ALL_TESTIMONIALS';
+export const TESTIMONIAL_ERROR = 'TESTIMONIAL_ERROR';
+export const ADD_TESTIMONIAL = 'ADD_TESTIMONIAL';
+export const EDIT_TESTIMONIAL = 'EDIT_TESTIMONIAL';
+export const DELETE_TESTIMONIAL = 'DELETE_TESTIMONIAL';
+
+//Testimonials
+export const GET_ALL_ANNOUNCEMENTS = 'GET_ALL_ANNOUNCEMENTS';
+export const ANNOUNCEMENT_ERROR = 'ANNOUNCEMENT_ERROR';
+export const ADD_ANNOUNCEMENT = 'ADD_ANNOUNCEMENT';
+export const EDIT_ANNOUNCEMENT = 'EDIT_ANNOUNCEMENT';
+export const DELETE_ANNOUNCEMENT = 'DELETE_ANNOUNCEMENT';
+
+//News
+export const GET_ALL_NEWS = 'GET_ALL_NEWS';
+export const ADD_NEWS = 'ADD_NEWS';
+export const EDIT_NEWS = 'EDIT_NEWS';
+export const DELETE_NEWS = 'DELETE_NEWS';
+
+//Messages
+export const GET_ALL_MESSAGES = 'GET_ALL_MESSAGES';
+export const DELETE_MESSAGE = 'DELETE_MESSAGE';
+
+//Fathers
+export const GET_ALL_FATHERS = 'GET_ALL_FATHERS';
+export const FATHER_ERROR = 'FATHER_ERROR';
+export const ADD_FATHER = 'ADD_FATHER';
+export const EDIT_FATHER = 'EDIT_FATHER';
+export const DELETE_FATHER = 'DELETE_FATHER';
+
 //Leaders
 export const GET_ALL_LEADERS = 'GET_ALL_LEADERS';
 export const LEADER_ERROR = 'LEADER_ERROR';
