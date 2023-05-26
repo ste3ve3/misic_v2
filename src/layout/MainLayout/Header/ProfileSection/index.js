@@ -236,7 +236,7 @@ const ProfileSection = ({ loggedInUser, getUser }) => {
                                             </StyledAccount>
                                             </Link>
                                         </Box>
-                                            <Divider />
+                                            {/* <Divider />
                                             <Card
                                                 sx={{
                                                     bgcolor: theme.palette.primary.light,
@@ -263,7 +263,7 @@ const ProfileSection = ({ loggedInUser, getUser }) => {
                                                     </Grid>
                                                 </CardContent>
                                             </Card>
-                                            <Divider />
+                                            <Divider /> */}
                                             <List
                                                 component="nav"
                                                 sx={{
