@@ -56,3 +56,18 @@ export const BLOG_ERROR = 'BLOG_ERROR';
 export const ADD_BLOG = 'ADD_BLOG';
 export const EDIT_BLOG = 'EDIT_BLOG';
 export const DELETE_BLOG = 'DELETE_BLOG';
+
+//Calendar
+export const GET_ALL_EVENTS = 'GET_ALL_EVENTS';
+export const EVENT_ERROR = 'EVENT_ERROR';
+export const ADD_EVENT = 'ADD_EVENT';
+export const EDIT_EVENT = 'EDIT_EVENT';
+export const DELETE_EVENT = 'DELETE_EVENT';
+export const HIGHLIGHT_EVENT = 'HIGHLIGHT_EVENT';
+
+//Authentication
+export const GET_LOGGEDIN_USER = 'GET_LOGGEDIN_USER';
+export const GET_ALL_USERS = 'GET_ALL_USERS';
+export const EDIT_USER = 'EDIT_USER';
+export const DELETE_USER = 'DELETE_USER';
+export const USER_ERROR = 'USER_ERROR';

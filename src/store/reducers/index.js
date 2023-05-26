@@ -5,6 +5,8 @@ import customizationReducer from './customizationReducer';
 import projectReducer from './projectReducer';
 import leaderReducer from './leaderReducer';
 import blogReducer from './blogReducer';
+import eventReducer from './calendarReducer';
+import authReducer from './authReducer';
 import testimonialReducer from './testimonialReducer';
 import fatherReducer from './fatherReducer';
 import messageReducer from './messageReducer';
@@ -18,6 +20,8 @@ const reducer = combineReducers({
     project: projectReducer,
     leader: leaderReducer,
     blog: blogReducer,
+    calendar: eventReducer,
+    auth: authReducer,
     testimonial: testimonialReducer,
     father: fatherReducer,
     message: messageReducer,

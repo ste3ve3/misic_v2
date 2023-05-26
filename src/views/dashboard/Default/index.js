@@ -5,12 +5,9 @@ import { Grid } from '@mui/material';
 
 // project imports
 import EarningCard from './EarningCard';
-import PopularCard from './PopularCard';
 import TotalOrderLineChartCard from './TotalOrderLineChartCard';
-import TotalIncomeDarkCard from './TotalIncomeDarkCard';
-import TotalIncomeLightCard from './TotalIncomeLightCard';
-import TotalGrowthBarChart from './TotalGrowthBarChart';
 import { gridSpacing } from 'store/constant';
+import { IconUsers, IconPray, IconUserCheck, IconBrandAsana, IconBrandDisqus, IconCalendar } from '@tabler/icons';
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
@@ -25,34 +22,25 @@ const Dashboard = () => {
             <Grid item xs={12}>
                 <Grid container spacing={gridSpacing}>
                     <Grid item lg={4} md={6} sm={6} xs={12}>
-                        <EarningCard isLoading={isLoading} />
+                        <EarningCard isLoading={isLoading} icon={<IconUsers fontSize="inherit" />} title="Registered Users" count="20" />
                     </Grid>
                     <Grid item lg={4} md={6} sm={6} xs={12}>
-                        <TotalOrderLineChartCard isLoading={isLoading} />
+                        <TotalOrderLineChartCard isLoading={isLoading} icon={<IconPray fontSize="inherit" />} title="Cathedral Priests" count="20" />
                     </Grid>
-                    <Grid item lg={4} md={12} sm={12} xs={12}>
-                        <Grid container spacing={gridSpacing}>
-                            <Grid item sm={6} xs={12} md={6} lg={12}>
-                                <TotalIncomeDarkCard isLoading={isLoading} />
-                            </Grid>
-                            <Grid item sm={6} xs={12} md={6} lg={12}>
-                                <TotalIncomeLightCard isLoading={isLoading} />
-                            </Grid>
-                        </Grid>
+                    <Grid item lg={4} md={6} sm={6} xs={12}>
+                        <EarningCard isLoading={isLoading} icon={<IconUserCheck fontSize="inherit" />} title="Cathedral Leaders" count="6" />
+                    </Grid>
+                    <Grid item lg={4} md={6} sm={6} xs={12}>
+                        <TotalOrderLineChartCard isLoading={isLoading} icon={<IconBrandAsana fontSize="inherit" />} title="Projects" count="10" />
+                    </Grid>
+                    <Grid item lg={4} md={6} sm={6} xs={12}>
+                        <EarningCard isLoading={isLoading} icon={<IconBrandDisqus fontSize="inherit" />} title="Blogs" count="5" />
+                    </Grid>
+                    <Grid item lg={4} md={6} sm={6} xs={12}>
+                        <TotalOrderLineChartCard isLoading={isLoading} icon={<IconCalendar fontSize="inherit" />} title="Ongoing Events" count="30" />
                     </Grid>
                 </Grid>
             </Grid>
-            {/* <Grid item xs={12}>
-                <Grid container spacing={gridSpacing}>
-                    <Grid item xs={12} md={8}>
-                        <TotalGrowthBarChart isLoading={isLoading} />
-                        
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                        <PopularCard isLoading={isLoading} />
-                    </Grid>
-                </Grid>
-            </Grid> */}
         </Grid>
     );
 };

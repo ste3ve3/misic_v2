@@ -1,15 +1,13 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-
-// material-ui
+import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import {
     Box,
     Button,
-    Checkbox,
     Divider,
     FormControl,
-    FormControlLabel,
+    CircularProgress,
     FormHelperText,
     Grid,
     IconButton,
@@ -20,33 +18,110 @@ import {
     Typography,
     useMediaQuery
 } from '@mui/material';
-
-// third party
-import * as Yup from 'yup';
 import { Formik } from 'formik';
-
-// project imports
-import useScriptRef from 'hooks/useScriptRef';
 import AnimateButton from 'components/extended/AnimateButton';
-
-// assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-
 import Google from 'assets/images/icons/social-google.svg';
+import { API } from 'api';
+import { toast } from 'react-hot-toast';
+import { useGoogleLogin } from '@react-oauth/google';
 
-// ============================|| FIREBASE - LOGIN ||============================ //
+    const initFormData = {
+        email: '',
+        password: ''
+    };
+
+  const initState = { loading: false, error: null, googleLoading: false, googleError: null };
 
 const FirebaseLogin = ({ ...others }) => {
     const theme = useTheme();
-    const scriptedRef = useScriptRef();
+    const navigate = useNavigate();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
     const customization = useSelector((state) => state.customization);
-    const [checked, setChecked] = useState(true);
+    const [formData, setFormData] = useState(initFormData);
+    const [state, setState] = useState(initState);
+    const [normalAuthError, setNormalAuthError] = useState(null)
+    const [googleAuthError, setGoogleAuthError] = useState(null)
 
-    const googleHandler = async () => {
-        console.error('Login');
+    const handleChange = (name, value) => {
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
+
+    const handleNormalLogin = async (e) => {
+        e.preventDefault();
+        setState(initState);
+        try {
+            setState((prev) => ({ ...prev, loading: true }));
+                await toast.promise(
+                    API.post(`/auth/loginUser?isDashboardAuth=true`, formData),
+                    {
+                        loading: `Checking credentials, please wait...`,
+                        success: `Logged In Successfully!`,
+                        error: `Login was unsuccessfull!`
+                    },
+                    { position: 'top-center' }
+                );
+            setFormData(initFormData);
+            navigate('/')
+        } catch (error) {
+            setState((prev) => ({
+                ...prev,
+                error: error.response?.data?.message || error.message || 'Unknown error occured, please try again.'
+            }));
+            if(error.response?.data?.message){
+                setNormalAuthError(error.response?.data?.message);
+            }
+        } finally {
+            setState((prev) => ({ ...prev, loading: false }));
+        }
+    };
+
+    const googleSuccess = (response) => {
+        const accessToken = response.access_token;
+    
+        fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+        })
+        .then(response => response.json())
+        .then(async(data) => {
+            setState(initState);
+            try {
+                setState((prev) => ({ ...prev, googleLoading: true }));
+                    await toast.promise(
+                        API.post(`/auth/googleAuth?isDashboardAuth=true`, data),
+                        {
+                            loading: `Checking credentials, please wait...`,
+                            success: `Logged In Successfully!`,
+                            error: `Login was unsuccessfull!`
+                        },
+                        { position: 'top-center' }
+                    );
+                navigate('/')
+            } catch (error) {
+                setState((prev) => ({
+                    ...prev,
+                    googleError: error.response?.data?.message || error.message || 'Unknown error occured, please try again.'
+                }));
+                if(error.response?.data?.message){
+                    setGoogleAuthError(error.response?.data?.message);
+                }
+            } finally {
+                setState((prev) => ({ ...prev, googleLoading: false }));
+            }
+        })
+        .catch(error => {
+          toast.error(error);
+        });
+      }
+    
+      const GoogleAuthentication = useGoogleLogin({
+        onSuccess: (response) => googleSuccess(response),
+        onError: (error) => toast.error(error)
+      });
+
 
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => {
@@ -61,23 +136,36 @@ const FirebaseLogin = ({ ...others }) => {
         <>
             <Grid container direction="column" justifyContent="center" spacing={2}>
                 <Grid item xs={12}>
+                    {googleAuthError && (
+                        <Box sx={{ my: 2, color: 'red' , fontSize: '28px' }}>
+                            <FormHelperText error sx={{ fontSize: '14px', fontWeight: 'bold', textAlign: 'center' }}>{googleAuthError}</FormHelperText>
+                        </Box>
+                    )}
                     <AnimateButton>
                         <Button
                             disableElevation
                             fullWidth
-                            onClick={googleHandler}
+                            onClick={GoogleAuthentication}
                             size="large"
                             variant="outlined"
+                            startIcon={state.googleLoading ? <CircularProgress size={20} color="inherit" /> : undefined}
                             sx={{
                                 color: 'grey.700',
                                 backgroundColor: theme.palette.grey[50],
-                                borderColor: theme.palette.grey[100]
+                                borderColor: theme.palette.grey[100],
                             }}
                         >
-                            <Box sx={{ mr: { xs: 1, sm: 2, width: 20 } }}>
-                                <img src={Google} alt="google" width={16} height={16} style={{ marginRight: matchDownSM ? 8 : 16 }} />
-                            </Box>
-                            Sign in with Google
+                            {
+                                state.googleLoading ? 
+                                    "Signing In..."
+                                :
+                                <>
+                                    <Box sx={{ mr: { xs: 1, sm: 2, width: 20 } }}>
+                                        <img src={Google} alt="google" width={17} height={17} style={{ marginRight: matchDownSM ? 8 : 16, marginTop: 6 }} />
+                                    </Box>
+                                    Sign in with Google
+                                </>  
+                            }
                         </Button>
                     </AnimateButton>
                 </Grid>
@@ -118,127 +206,74 @@ const FirebaseLogin = ({ ...others }) => {
                 </Grid>
             </Grid>
 
-            <Formik
-                initialValues={{
-                    email: 'info@codedthemes.com',
-                    password: '123456',
-                    submit: null
-                }}
-                validationSchema={Yup.object().shape({
-                    email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-                    password: Yup.string().max(255).required('Password is required')
-                })}
-                onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                    try {
-                        if (scriptedRef.current) {
-                            setStatus({ success: true });
-                            setSubmitting(false);
-                        }
-                    } catch (err) {
-                        console.error(err);
-                        if (scriptedRef.current) {
-                            setStatus({ success: false });
-                            setErrors({ submit: err.message });
-                            setSubmitting(false);
-                        }
-                    }
-                }}
-            >
-                {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
-                    <form noValidate onSubmit={handleSubmit} {...others}>
-                        <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-                            <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
-                            <OutlinedInput
-                                id="outlined-adornment-email-login"
-                                type="email"
-                                value={values.email}
-                                name="email"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                label="Email Address / Username"
-                                inputProps={{}}
-                            />
-                            {touched.email && errors.email && (
-                                <FormHelperText error id="standard-weight-helper-text-email-login">
-                                    {errors.email}
-                                </FormHelperText>
-                            )}
-                        </FormControl>
+            <Formik>
+                <form noValidate onSubmit={handleNormalLogin} {...others}>
+                    <FormControl fullWidth sx={{ ...theme.typography.customInput }}>
+                        <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
+                        <OutlinedInput
+                            id="outlined-adornment-email-login"
+                            type="email"
+                            value={formData.email}
+                            name="email"
+                            onChange={(e) => handleChange('email', e.target.value)}
+                            label="Email Address / Username"
+                            inputProps={{}}
+                        />
+                    </FormControl>
 
-                        <FormControl
-                            fullWidth
-                            error={Boolean(touched.password && errors.password)}
-                            sx={{ ...theme.typography.customInput }}
-                        >
-                            <InputLabel htmlFor="outlined-adornment-password-login">Password</InputLabel>
-                            <OutlinedInput
-                                id="outlined-adornment-password-login"
-                                type={showPassword ? 'text' : 'password'}
-                                value={values.password}
-                                name="password"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="toggle password visibility"
-                                            onClick={handleClickShowPassword}
-                                            onMouseDown={handleMouseDownPassword}
-                                            edge="end"
-                                            size="large"
-                                        >
-                                            {showPassword ? <Visibility /> : <VisibilityOff />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                }
-                                label="Password"
-                                inputProps={{}}
-                            />
-                            {touched.password && errors.password && (
-                                <FormHelperText error id="standard-weight-helper-text-password-login">
-                                    {errors.password}
-                                </FormHelperText>
-                            )}
-                        </FormControl>
-                        <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={checked}
-                                        onChange={(event) => setChecked(event.target.checked)}
-                                        name="checked"
-                                        color="primary"
-                                    />
-                                }
-                                label="Remember me"
-                            />
-                            <Typography variant="subtitle1" color="secondary" sx={{ textDecoration: 'none', cursor: 'pointer' }}>
-                                Forgot Password?
-                            </Typography>
-                        </Stack>
-                        {errors.submit && (
-                            <Box sx={{ mt: 3 }}>
-                                <FormHelperText error>{errors.submit}</FormHelperText>
-                            </Box>
-                        )}
-
-                        <Box sx={{ mt: 2 }}>
-                            <AnimateButton>
-                                <Button
-                                    disableElevation
-                                    disabled={isSubmitting}
-                                    fullWidth
-                                    size="large"
-                                    type="submit"
-                                    variant="contained"
-                                    color="secondary"
-                                >
-                                    Sign in
-                                </Button>
-                            </AnimateButton>
+                    <FormControl
+                        fullWidth
+                        sx={{ ...theme.typography.customInput }}
+                    >
+                        <InputLabel htmlFor="outlined-adornment-password-login">Password</InputLabel>
+                        <OutlinedInput
+                            id="outlined-adornment-password-login"
+                            type={showPassword ? 'text' : 'password'}
+                            value={formData.password}
+                            name="password"
+                            onChange={(e) => handleChange('password', e.target.value)}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                        edge="end"
+                                        size="large"
+                                    >
+                                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            }
+                            label="Password"
+                            inputProps={{}}
+                        />
+                    </FormControl>
+                    
+                    {normalAuthError && (
+                        <Box sx={{ mt: 2, color: 'red' , fontSize: '28px' }}>
+                            <FormHelperText error sx={{ fontSize: '14px', fontWeight: 'bold', textAlign: 'center' }}>{normalAuthError}</FormHelperText>
                         </Box>
-                    </form>
-                )}
+                    )}
+
+                    <Box sx={{ mt: 2 }}>
+                        <AnimateButton>
+                            <Button
+                                disableElevation
+                                fullWidth
+                                size="large"
+                                type="submit"
+                                variant="contained"
+                                color="secondary"
+                                startIcon={state.loading ? <CircularProgress size={20} color="inherit" /> : undefined}
+                            >
+                                {
+                                    state.loading ? 'Signing In...' : 'Sign in'
+                                }
+                            </Button>
+                        </AnimateButton>
+                    </Box>
+                </form>
             </Formik>
         </>
     );

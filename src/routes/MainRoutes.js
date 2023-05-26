@@ -5,7 +5,9 @@ import MainLayout from 'layout/MainLayout';
 import Loadable from 'components/Loadable';
 import NotFound from 'views/pages/NotFound';
 import ProjectsPage from 'views/pages/ProjectsPage';
+import CalendarPage from 'views/pages/calendar/CalendarPage';
 import LeadersPage from 'views/dashboard/members/LeadersPage';
+import UsersPage from 'views/dashboard/members/UsersPage';
 import BlogsPage from 'views/pages/blog/BlogsPage';
 import AddBlogForm from 'components/blog/AddBlogForm';
 import EditBlog from 'views/pages/blog/EditBlog';
@@ -17,16 +19,6 @@ import AnnouncementsPage from 'views/utilities/AnnouncementsPage';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
-
-// utilities routing
-const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
-const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
-const UtilsShadow = Loadable(lazy(() => import('views/utilities/Shadow')));
-const UtilsMaterialIcons = Loadable(lazy(() => import('views/utilities/MaterialIcons')));
-const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons')));
-
-// sample page routing
-const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -53,6 +45,10 @@ const MainRoutes = {
                 {
                     path: 'leaders',
                     element: <LeadersPage />
+                },
+                {
+                    path: 'users',
+                    element: <UsersPage />
                 },
                 {
                     path: 'fathers',
@@ -82,20 +78,6 @@ const MainRoutes = {
                 }
             ]
         },
-
-        {
-            path: 'icons',
-            children: [
-                {
-                    path: 'tabler-icons',
-                    element: <UtilsTablerIcons />
-                },
-                {
-                    path: 'material-icons',
-                    element: <UtilsMaterialIcons />
-                }
-            ]
-        },
         {
             path: 'content',
             children: [
@@ -110,12 +92,12 @@ const MainRoutes = {
                 {
                     path: 'projects',
                     element: <ProjectsPage />
+                },
+                {
+                    path: 'calendar',
+                    element: <CalendarPage />
                 }
             ]
-        },
-        {
-            path: 'sample-page',
-            element: <SamplePage />
         },
         {
             path: '*',
