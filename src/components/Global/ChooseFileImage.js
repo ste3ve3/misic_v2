@@ -28,7 +28,9 @@ const ChooseFileImage = ({ title, onSelect, selected, error, fullWidth = true })
         <Stack sx={{ my: 1 }} alignItems="start" spacing={2}>
             <Typography>{title}</Typography>
 
-            {selected && <img src={selected} alt="Choosen" style={{ objectFit: 'contain', height: 200, borderRadius: 10 }} />}
+            {selected && (
+                <img src={selected} alt="Choosen" style={{ objectFit: 'contain', height: 200, width: '100%', borderRadius: 10 }} />
+            )}
             {error && (
                 <Typography variant="caption" color="error">
                     {error}

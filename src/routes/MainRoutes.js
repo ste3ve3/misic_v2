@@ -11,6 +11,9 @@ import AddBlogForm from 'components/blog/AddBlogForm';
 import EditBlog from 'views/pages/blog/EditBlog';
 import TestimonialsPage from 'views/utilities/TestimonialsPage';
 import FathersPage from 'views/dashboard/members/FathersPage';
+import MessagesPage from 'views/utilities/MessagesPage';
+import NewsPage from 'views/utilities/NewsPage';
+import AnnouncementsPage from 'views/utilities/AnnouncementsPage';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -64,6 +67,18 @@ const MainRoutes = {
                 {
                     path: 'testimonials',
                     element: <TestimonialsPage />
+                },
+                {
+                    path: 'messages',
+                    element: <MessagesPage />
+                },
+                {
+                    path: 'news',
+                    element: <NewsPage />
+                },
+                {
+                    path: 'announcements',
+                    element: <AnnouncementsPage />
                 }
             ]
         },

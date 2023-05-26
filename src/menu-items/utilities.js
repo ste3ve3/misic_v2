@@ -1,5 +1,5 @@
 // assets
-import { IconTypography, IconPalette, IconShadow, IconWindmill } from '@tabler/icons';
+import { IconTypography, IconPalette, IconShadow, IconWindmill, IconMailOpened, IconArticle, IconUnlink } from '@tabler/icons';
 
 // constant
 const icons = {
@@ -17,29 +17,21 @@ const activities = {
     type: 'group',
     children: [
         {
-            id: 'calendar',
-            title: 'Calendar',
+            id: 'news',
+            title: 'News',
             type: 'item',
-            url: '/activities/calendar',
-            icon: icons.IconTypography,
+            url: '/activities/news',
+            icon: IconArticle,
             breadcrumbs: false
         },
         {
-            id: 'events',
-            title: 'Events',
+            id: 'announcements',
+            title: 'Announcements',
             type: 'item',
-            url: '/activities/events',
-            icon: icons.IconTypography,
+            url: '/activities/announcements',
+            icon: IconUnlink,
             breadcrumbs: false
         },
-        // {
-        //     id: 'util-color',
-        //     title: 'Color',
-        //     type: 'item',
-        //     url: '/utils/util-color',
-        //     icon: icons.IconPalette,
-        //     breadcrumbs: false
-        // },
         {
             id: 'testimonials',
             title: 'Testimonials',
@@ -47,29 +39,15 @@ const activities = {
             url: '/activities/testimonials',
             icon: icons.IconShadow,
             breadcrumbs: false
+        },
+        {
+            id: 'messages',
+            title: 'Messages',
+            type: 'item',
+            url: '/activities/messages',
+            icon: IconMailOpened,
+            breadcrumbs: false
         }
-        // {
-        //     id: 'icons',
-        //     title: 'Icons',
-        //     type: 'collapse',
-        //     icon: icons.IconWindmill,
-        //     children: [
-        //         {
-        //             id: 'tabler-icons',
-        //             title: 'Tabler Icons',
-        //             type: 'item',
-        //             url: '/icons/tabler-icons',
-        //             breadcrumbs: false
-        //         },
-        //         {
-        //             id: 'material-icons',
-        //             title: 'Material Icons',
-        //             type: 'item',
-        //             url: '/icons/material-icons',
-        //             breadcrumbs: false
-        //         }
-        //     ]
-        // }
     ]
 };
 
