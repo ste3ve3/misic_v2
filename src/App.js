@@ -13,7 +13,7 @@ import themes from "themes";
 import NavigationScroll from "layout/NavigationScroll";
 import { Toaster } from "react-hot-toast";
 
-// ==============================|| MAIN APP ||============================== //
+// ==============================|| APP ||============================== //
 
 const App = () => {
   const customization = useSelector((state) => state.customization);
