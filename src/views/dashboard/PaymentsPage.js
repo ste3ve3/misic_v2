@@ -1,5 +1,4 @@
 import { filter } from 'lodash';
-// @mui
 import {
   Card,
   Table,
