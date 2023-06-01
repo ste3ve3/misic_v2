@@ -4,6 +4,7 @@ import { lazy } from 'react';
 import MainLayout from 'layout/MainLayout';
 import NotFound from 'views/pages/NotFound';
 import UsersPage from 'views/dashboard/members/UsersPage';
+import PaymentsPage from 'views/dashboard/PaymentsPage';
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -21,6 +22,15 @@ const MainRoutes = {
                 {
                     path: 'home',
                     element: <UsersPage />
+                }
+            ]
+        },
+        {
+            path: '/',
+            children: [
+                {
+                    path: 'payments',
+                    element: <PaymentsPage /> 
                 }
             ]
         },

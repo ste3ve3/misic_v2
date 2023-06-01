@@ -12,11 +12,11 @@ export const getLoggedInUser = () => {
 };
 
 
-export const getUsers = ({ users = [] }) => {
+export const getUsers = ({ payments = [] }) => {
     return {
         type: actions.GET_ALL_USERS,
         payload: {
-            users
+            payments
         }
     };
 };

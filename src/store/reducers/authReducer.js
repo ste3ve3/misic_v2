@@ -3,6 +3,7 @@ import { GET_LOGGEDIN_USER, GET_ALL_USERS, EDIT_USER, DELETE_USER, USER_ERROR } 
 const initProjectState = {
     error: null,
     users: [],
+    payments: [],
     loggedInUser : null,
     loading: true
 };
@@ -14,14 +15,14 @@ const authReducer = (state = initProjectState, action) => {
                 ...state,
                 error: null,
                 loading: false,
-                users: [...action.payload.users]
+                payments: [...action.payload.payments]
         };
         case GET_LOGGEDIN_USER:
             return {
                 ...state,
                 error: null,
                 loading: false,
-                loggedInUser: {...action.payload.loggedInUser}
+                loggedInUser: {...action.payload.data}
             };
             case EDIT_USER:
             return {
