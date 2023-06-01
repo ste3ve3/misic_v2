@@ -8,7 +8,6 @@ const icons = { IconHome, IconUsers };
 
 const dashboard = {
     id: 'dashboard',
-    title: 'Dashboard',
     type: 'group',
     children: [
         {
@@ -18,35 +17,6 @@ const dashboard = {
             url: '/dashboard/home',
             icon: icons.IconHome,
             breadcrumbs: false
-        },
-        {
-            id: 'members',
-            title: 'Members',
-            type: 'collapse',
-            icon: icons.IconUsers,
-            children: [
-                {
-                    id: 'users',
-                    title: 'Users',
-                    type: 'item',
-                    url: '/members/users',
-                    breadcrumbs: false
-                },
-                {
-                    id: 'leaders',
-                    title: 'Leaders',
-                    type: 'item',
-                    url: '/members/leaders',
-                    breadcrumbs: false
-                },
-                {
-                    id: 'fathers',
-                    title: 'Fathers',
-                    type: 'item',
-                    url: '/members/fathers',
-                    breadcrumbs: false
-                }
-            ]
         }
     ]
 };

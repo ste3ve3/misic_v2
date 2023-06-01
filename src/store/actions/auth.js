@@ -1,13 +1,16 @@
 import * as actions from '../actionTypes';
 
-export const getLoggedInUser = ({ loggedInUser = null }) => {
+export const getLoggedInUser = () => {
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
     return {
         type: actions.GET_LOGGEDIN_USER,
         payload: {
-            loggedInUser
+            loggedInUser: loggedInUser || null
         }
     };
 };
+
 
 export const getUsers = ({ users = [] }) => {
     return {

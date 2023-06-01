@@ -1,7 +1,7 @@
-import logo from 'assets/images/logo2.png';
+import logo from 'assets/images/logo.png';
 
 const Logo = () => {
-    return <img src={logo} alt="Cathedrale Saint Michaele" width={150} />;
+    return <img src={logo} alt="Misic Finance Logo" width={150} />;
 };
 
 export default Logo;

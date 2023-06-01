@@ -45,55 +45,26 @@ const StyledAccount = styled('div')(({ theme }) => ({
     backgroundColor: alpha('#d1f1f8', 0.70),
   }));
 
-const ProfileSection = ({ loggedInUser, getUser }) => {
+const ProfileSection = ({ getUser }) => {
     const { data, isError, isLoading } = useFetcher('/auth/loggedInUser');
     const theme = useTheme();
     const customization = useSelector((state) => state.customization);
     const navigate = useNavigate();
-    const [state, setState] = useState(initState);
-    const [sdm, setSdm] = useState(true);
-    const [value, setValue] = useState('');
-    const [notification, setNotification] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(-1);
     const [open, setOpen] = useState(false);
     const anchorRef = useRef(null);
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
 
     useEffect(() => {
-        if (data?.loggedInUser) {
-            getUser({ loggedInUser: data?.loggedInUser });
-        }
-    }, [data?.loggedInUser]);
-
-    useEffect(() => {
-        if (!isLoading && isError) {
+        if (!loggedInUser) {
           navigate('/login');
-          window.location.reload();
         }
-      }, [isLoading, isError]);
+      }, [loggedInUser]);
     
     const handleLogout = async (e) => {
         e.preventDefault();
-        setState(initState);
-        try {
-            setState((prev) => ({ ...prev, loading: true }));
-                await toast.promise(
-                    API.post(`/auth/logoutUser`),
-                    {
-                        loading: `Signing out, please wait...`,
-                        success: `Logged out Successfully!`,
-                        error: `Logout was unsuccessfull!`
-                    },
-                    { position: 'top-center' }
-                );
-            navigate('/login')
-        } catch (error) {
-            setState((prev) => ({
-                ...prev,
-                error: error.response?.data?.message || error.message || 'Unknown error occured, please try again.'
-            }));
-        } finally {
-            setState((prev) => ({ ...prev, loading: false }));
-        }
+        localStorage.removeItem("loggedInUser")
+        navigate('/login')
     };
 
     const handleClose = (event) => {
@@ -190,22 +161,13 @@ const ProfileSection = ({ loggedInUser, getUser }) => {
                         <Paper>
                             <ClickAwayListener onClickAway={handleClose}>
                                 <MainCard border={false} elevation={16} content={false} boxShadow shadow={theme.shadows[16]}>
-                                    <Box sx={{ p: 2 }}>
-                                        <Stack>
-                                            <Stack direction="row" spacing={0.5} sx={{my: 1, mb:2}} alignItems="center">
-                                                <Typography variant="h4">Welcome to the admin dashboard</Typography>
-                                            </Stack>
-                                            
-                                        </Stack>
-                                        <Divider />
-                                    </Box>
                                     <PerfectScrollbar style={{ height: '100%', maxHeight: 'calc(100vh - 250px)', overflowX: 'hidden' }}>
                                         <Box sx={{ p: 2 }}>
                                             
-                                        <Box sx={{ mb: 5, mx: 2.5 }}>
+                                        <Box sx={{ mx: 2.5 }}>
                                             <Link underline="none">
                                             <StyledAccount>
-                                                <Avatar 
+                                                <Avatar  
                                                 src={loggedInUser?.picture?.url}
                                                 sx={{
                                                     display: 'flex',
@@ -223,7 +185,7 @@ const ProfileSection = ({ loggedInUser, getUser }) => {
                                                     variant="subtitle1"
                                                     sx={{ color: 'text.primary', font: 'bold' }}
                                                 >
-                                                    {loggedInUser?.names}
+                                                    {loggedInUser?.lastName +' '+loggedInUser?.firstName}
                                                 </Typography>
 
                                                 <Typography
@@ -236,34 +198,6 @@ const ProfileSection = ({ loggedInUser, getUser }) => {
                                             </StyledAccount>
                                             </Link>
                                         </Box>
-                                            {/* <Divider />
-                                            <Card
-                                                sx={{
-                                                    bgcolor: theme.palette.primary.light,
-                                                    my: 2
-                                                }}
-                                            >
-                                                <CardContent>
-                                                    <Grid container spacing={3} direction="column">
-                                                        <Grid item>
-                                                            <Grid item container alignItems="center" justifyContent="space-between">
-                                                                <Grid item>
-                                                                    <Typography variant="subtitle1">Allow Notifications</Typography>
-                                                                </Grid>
-                                                                <Grid item>
-                                                                    <Switch
-                                                                        checked={notification}
-                                                                        onChange={(e) => setNotification(e.target.checked)}
-                                                                        name="sdm"
-                                                                        size="small"
-                                                                    />
-                                                                </Grid>
-                                                            </Grid>
-                                                        </Grid>
-                                                    </Grid>
-                                                </CardContent>
-                                            </Card>
-                                            <Divider /> */}
                                             <List
                                                 component="nav"
                                                 sx={{
@@ -280,33 +214,19 @@ const ProfileSection = ({ loggedInUser, getUser }) => {
                                                     }
                                                 }}
                                             >
-                                                <Link href={process.env.REACT_APP_CLIENT_URL} underline='none' target='__blank'>
-                                                <ListItemButton
-                                                    sx={{ borderRadius: `${customization.borderRadius}px` }}
-                                                    selected={selectedIndex === 0}
-                                                    
-                                                >
-                                                    <ListItemIcon>
-                                                        <IconLogout stroke={1.5} size="1.3rem" />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary={<Typography variant="body2">Go to Website</Typography>} />
-                                                </ListItemButton>
-                                                </Link>
                                                 <ListItemButton
                                                     sx={{ borderRadius: `${customization.borderRadius}px` }}
                                                     selected={selectedIndex === 4}
                                                     onClick={handleLogout}
                                                 >
                                                     <ListItemIcon>
-                                                        {state.loading ? <CircularProgress size={20} color="inherit" /> : <IconLogin stroke={1.5} size="1.3rem" />}  
+                                                        <IconLogin stroke={1.5} size="1.3rem" />
                                                     </ListItemIcon>
                                                     <ListItemText 
                                                         primary={<Typography 
                                                         variant="body2"
                                                     >
-                                                        {
-                                                            state.loading ? 'Logging out...' : 'Logout'
-                                                        }
+                                                        Logout
                                                     </Typography>} />
                                                 </ListItemButton>
                                             </List>

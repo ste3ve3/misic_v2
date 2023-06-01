@@ -35,12 +35,21 @@ import DataWidget from 'components/Global/DataWidget';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'email', label: 'Email', alignRight: false },
-  { id: 'type', label: 'Account Type', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: '' },
+  { id: 'date', label: 'Date', alignRight: false },
+  { id: 'district', label: 'District', alignRight: false },
+  { id: 'todayTotalCollected', label: 'Today Total Collected', alignRight: false },
+  { id: 'todayTicketCashCnt', label: 'Today Ticket Cash Count', alignRight: false },
+  { id: 'todayTicketCashValue', label: 'Today Ticket Cash Value', alignRight: false },
+  { id: 'todayTicketMobCnt', label: 'Today Ticket MobCount', alignRight: false },
+  { id: 'todayTicketMobValue', label: 'Today Ticket MobValue', alignRight: false },
+  { id: 'todayTicketUnpaidCnt', label: 'Today Ticket Unpaid Count', alignRight: false },
+  { id: 'todayTicketUnpaidValue', label: 'Today Ticket Unpaid Value', alignRight: false },
+  { id: 'pastTicketsByCashCnt', label: 'Past Tickets By Cash Count', alignRight: false },
+  { id: 'pastTicketsByCashValue', label: 'Past Tickets By Cash Value', alignRight: false },
+  { id: 'pastTicketsByMobCnt', label: 'Past Tickets By MobCount', alignRight: false },
+  { id: 'pastTicketsByMobValue', label: 'Past Tickets By Mob Value', alignRight: false },
+  { id: 'pastTicketsByUnpaidCnt', label: 'Past Tickets By Unpaid Count', alignRight: false },
+  { id: 'pastTicketsByUnpaidValue', label: 'Past Tickets By Unpaid Value', alignRight: false },
 ];
 
 // ----------------------------------------------------------------------
@@ -72,7 +81,7 @@ function applySortFilter(array, comparator, query) {
     return filter(
       array,
       _user =>
-        _user.names.toLowerCase().indexOf(query.toLowerCase()) !== -1,
+        _user.district.toLowerCase().indexOf(query.toLowerCase()) !== -1,
     );
   }
   return stabilizedThis.map(el => el[0]);
@@ -81,7 +90,7 @@ function applySortFilter(array, comparator, query) {
 const initState = { loading: false, error: null };
 
 const UsersPage = ({
-  users,
+  // users,
   getUsers,
   deleteUser,
   editRole,
@@ -118,12 +127,185 @@ const UsersPage = ({
 
   const handleSelectAllClick = event => {
     if (event.target.checked) {
-      const newSelecteds = users?.map(n => n.name);
+      const newSelecteds = users?.map(n => n.district);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
+
+  const users = [
+    {
+      date: '2025-12-22',
+      district: 'Ngoma',
+      todayTotalCollected: '0',
+      todayTicketCashCnt: '0',
+      todayTicketCashValue: '0',
+      todayTicketMobCnt: '0',
+      todayTicketMobValue: '0',
+      todayTicketUnpaidCnt: '0',
+      todayTicketUnpaidValue: '0',
+      pastTicketsByCashCnt: '0',
+      pastTicketsByCashValue: '0',
+      pastTicketsByMobCnt: '0',
+      pastTicketsByMobValue: '0',
+      pastTicketsByUnpaidCnt: '2965',
+      pastTicketsByUnpaidValue: '1541900',
+    },
+    {
+      date: '2025-12-22',
+      district: 'Kayonza',
+      todayTotalCollected: '0',
+      todayTicketCashCnt: '0',
+      todayTicketCashValue: '0',
+      todayTicketMobCnt: '0',
+      todayTicketMobValue: '0',
+      todayTicketUnpaidCnt: '0',
+      todayTicketUnpaidValue: '0',
+      pastTicketsByCashCnt: '0',
+      pastTicketsByCashValue: '0',
+      pastTicketsByMobCnt: '0',
+      pastTicketsByMobValue: '0',
+      pastTicketsByUnpaidCnt: '2965',
+      pastTicketsByUnpaidValue: '1541900',
+    },
+    {
+      date: '2025-12-22',
+      district: 'Kirehe',
+      todayTotalCollected: '0',
+      todayTicketCashCnt: '0',
+      todayTicketCashValue: '0',
+      todayTicketMobCnt: '0',
+      todayTicketMobValue: '0',
+      todayTicketUnpaidCnt: '0',
+      todayTicketUnpaidValue: '0',
+      pastTicketsByCashCnt: '0',
+      pastTicketsByCashValue: '0',
+      pastTicketsByMobCnt: '0',
+      pastTicketsByMobValue: '0',
+      pastTicketsByUnpaidCnt: '2965',
+      pastTicketsByUnpaidValue: '1541900',
+    },
+    {
+      date: '2025-12-22',
+      district: 'Rwamagana',
+      todayTotalCollected: '0',
+      todayTicketCashCnt: '0',
+      todayTicketCashValue: '0',
+      todayTicketMobCnt: '0',
+      todayTicketMobValue: '0',
+      todayTicketUnpaidCnt: '0',
+      todayTicketUnpaidValue: '0',
+      pastTicketsByCashCnt: '0',
+      pastTicketsByCashValue: '0',
+      pastTicketsByMobCnt: '0',
+      pastTicketsByMobValue: '0',
+      pastTicketsByUnpaidCnt: '2965',
+      pastTicketsByUnpaidValue: '1541900',
+    },
+    {
+      date: '2025-12-22',
+      district: 'Gicumbi',
+      todayTotalCollected: '0',
+      todayTicketCashCnt: '0',
+      todayTicketCashValue: '0',
+      todayTicketMobCnt: '0',
+      todayTicketMobValue: '0',
+      todayTicketUnpaidCnt: '0',
+      todayTicketUnpaidValue: '0',
+      pastTicketsByCashCnt: '0',
+      pastTicketsByCashValue: '0',
+      pastTicketsByMobCnt: '0',
+      pastTicketsByMobValue: '0',
+      pastTicketsByUnpaidCnt: '2965',
+      pastTicketsByUnpaidValue: '1541900',
+    },
+    {
+      date: '2025-12-22',
+      district: 'Musanze',
+      todayTotalCollected: '0',
+      todayTicketCashCnt: '0',
+      todayTicketCashValue: '0',
+      todayTicketMobCnt: '0',
+      todayTicketMobValue: '0',
+      todayTicketUnpaidCnt: '0',
+      todayTicketUnpaidValue: '0',
+      pastTicketsByCashCnt: '0',
+      pastTicketsByCashValue: '0',
+      pastTicketsByMobCnt: '0',
+      pastTicketsByMobValue: '0',
+      pastTicketsByUnpaidCnt: '2965',
+      pastTicketsByUnpaidValue: '1541900',
+    },
+    {
+      date: '2025-12-22',
+      district: 'Rusizi',
+      todayTotalCollected: '0',
+      todayTicketCashCnt: '0',
+      todayTicketCashValue: '0',
+      todayTicketMobCnt: '0',
+      todayTicketMobValue: '0',
+      todayTicketUnpaidCnt: '0',
+      todayTicketUnpaidValue: '0',
+      pastTicketsByCashCnt: '0',
+      pastTicketsByCashValue: '0',
+      pastTicketsByMobCnt: '0',
+      pastTicketsByMobValue: '0',
+      pastTicketsByUnpaidCnt: '2965',
+      pastTicketsByUnpaidValue: '1541900',
+    },
+    {
+      date: '2025-12-22',
+      district: 'Rubavu',
+      todayTotalCollected: '0',
+      todayTicketCashCnt: '0',
+      todayTicketCashValue: '0',
+      todayTicketMobCnt: '0',
+      todayTicketMobValue: '0',
+      todayTicketUnpaidCnt: '0',
+      todayTicketUnpaidValue: '0',
+      pastTicketsByCashCnt: '0',
+      pastTicketsByCashValue: '0',
+      pastTicketsByMobCnt: '0',
+      pastTicketsByMobValue: '0',
+      pastTicketsByUnpaidCnt: '2965',
+      pastTicketsByUnpaidValue: '1541900',
+    },
+    {
+      date: '2025-12-22',
+      district: 'Muhanga',
+      todayTotalCollected: '0',
+      todayTicketCashCnt: '0',
+      todayTicketCashValue: '0',
+      todayTicketMobCnt: '0',
+      todayTicketMobValue: '0',
+      todayTicketUnpaidCnt: '0',
+      todayTicketUnpaidValue: '0',
+      pastTicketsByCashCnt: '0',
+      pastTicketsByCashValue: '0',
+      pastTicketsByMobCnt: '0',
+      pastTicketsByMobValue: '0',
+      pastTicketsByUnpaidCnt: '2965',
+      pastTicketsByUnpaidValue: '1541900',
+    },
+    {
+      date: '2025-12-22',
+      district: 'Ruhango',
+      todayTotalCollected: '0',
+      todayTicketCashCnt: '0',
+      todayTicketCashValue: '0',
+      todayTicketMobCnt: '0',
+      todayTicketMobValue: '0',
+      todayTicketUnpaidCnt: '0',
+      todayTicketUnpaidValue: '0',
+      pastTicketsByCashCnt: '0',
+      pastTicketsByCashValue: '0',
+      pastTicketsByMobCnt: '0',
+      pastTicketsByMobValue: '0',
+      pastTicketsByUnpaidCnt: '2965',
+      pastTicketsByUnpaidValue: '1541900',
+    },
+  ]
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -229,10 +411,8 @@ const UsersPage = ({
           alignItems="center"
           justifyContent="space-between"
           mb={4}
+          mt={8}
         >
-          <Typography variant="h3" gutterBottom>
-            Users
-          </Typography>
         </Stack>
 
         <Card
@@ -241,7 +421,7 @@ const UsersPage = ({
         }}
         >
           <DataWidget
-            title={'Users'}
+            title={'Data'}
             isLoading={isLoading && !users?.length && !isError}
             isError={
               !isLoading && isError && !users?.length ? isError : null
@@ -255,7 +435,7 @@ const UsersPage = ({
             />
 
             <Scrollbar>
-              <TableContainer sx={{ minWidth: 800, overflowX: 'hidden' }}>
+              <TableContainer sx={{ width: '3000px' }}>
                 <Table>
                   <UserListHead
                     order={order}
@@ -272,7 +452,7 @@ const UsersPage = ({
                         page * rowsPerPage,
                         page * rowsPerPage + rowsPerPage,
                       )
-                      .map(row => {
+                      .map((row , index) => {
                         const selectedUser =
                           selected.indexOf(row.name) !== -1;
 
@@ -280,14 +460,10 @@ const UsersPage = ({
                           <UserListTile
                             user={row}
                             selectedUser={selectedUser}
-                            key={row._id}
+                            key={index}
                             onCheckBoxClicked={event =>
                               handleClick(event, row.name)
                             }
-                            editRole={editUserRole}
-                            currentUserId={currentUser._id}
-                            // currentUserRole={currentUser.role}
-                            deleteUser={handleDeleteUser}
                           />
                         );
                       })}

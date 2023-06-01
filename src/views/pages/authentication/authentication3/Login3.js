@@ -15,7 +15,17 @@ const Login = () => {
 
     return (
         <AuthWrapper1>
-            <Grid container direction="column" justifyContent="flex-end" sx={{ minHeight: '100vh' }} >
+            <Grid container direction="column" justifyContent="flex-end" sx={{ minHeight: '100vh', backgroundColor: '#2579C1' }} >
+                <Typography
+                    variant="caption"
+                    fontSize="30px"
+                    marginTop="30px"
+                    textAlign='center'
+                    fontWeight='bold'
+                    color="white"
+                >
+                    MILLENNIUM SAVINGS AND INVESTMENT COOPERATIVE
+                </Typography>
                 <Grid item xs={12}>
                     <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: 'calc(100vh - 68px)' }}>
                         <Grid item sx={{ m: { xs: 1, sm: 3 }, mb: 0 }}>
@@ -36,16 +46,9 @@ const Login = () => {
                                             <Grid item>
                                                 <Stack alignItems="center" justifyContent="center" spacing={1}>
                                                     <Typography
-                                                        color={theme.palette.secondary.main}
-                                                        gutterBottom
-                                                        variant='h3'
-                                                        textAlign='center'
-                                                    >
-                                                        Cathedrale Saint Michael Dashboard
-                                                    </Typography>
-                                                    <Typography
                                                         variant="caption"
                                                         fontSize="14px"
+                                                        marginBottom="13px"
                                                         textAlign='center'
                                                     >
                                                         Enter your credentials to continue
