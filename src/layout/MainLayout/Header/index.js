@@ -11,7 +11,7 @@ import ProfileSection from './ProfileSection';
 import NotificationSection from './NotificationSection';
 
 // assets
-import { IconMenu2 } from '@tabler/icons';
+
 
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
@@ -33,12 +33,16 @@ const Header = ({ handleLeftDrawerToggle }) => {
                 <Box component="span" sx={{ display: { xs: 'none', md: 'block' }, flexGrow: 1 }}>
                     <LogoSection />
                 </Box>
+
             </Box>
 
+            {/* header search */}
             <SearchSection />
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ flexGrow: 1 }} />
 
+            {/* notification & profile */}
+            {/* <NotificationSection /> */}
             <ProfileSection />
         </>
     );

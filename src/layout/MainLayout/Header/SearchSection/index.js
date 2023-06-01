@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState } from 'react'
 
 // material-ui
 import { useTheme, styled } from '@mui/material/styles';
@@ -83,6 +83,7 @@ const SearchSection = () => {
             <Box sx={{ display: { xs: 'none', md: 'block' } }}>
             <Typography variant='h2' sx={{ marginLeft: 4}} color='secondary'>MILLENNIUM SAVINGS AND INVESTMENT COOPERATIVE</Typography>
             </Box>
+    
         </>
     );
 };
