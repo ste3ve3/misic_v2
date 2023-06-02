@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 // components
 import Scrollbar from 'components/scrollbar';
+import dayjs from 'dayjs';
 // sections
 import {
   UserListHead,
@@ -31,6 +32,8 @@ import {
 import DataWidget from 'components/Global/DataWidget';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import * as XLSX from 'xlsx';
+import DatePickerValue from 'components/Global/DatePicker';
 
 // ----------------------------------------------------------------------
 
@@ -86,8 +89,11 @@ const PaymentsPage = ({
   payments,
   getUsers,
 }) => {
+  const [startDate, setStartDate] = useState(localStorage.getItem("startDate") || '');
 
-  const { data, isError, isLoading } = useFetcher('/payments?requestUserId=51&page=1&size=63&searchBy=&startDate=2002-05-31&endDate=2023-06-01');
+  const [endDate, setEndDate] = useState(localStorage.getItem("endDate")  || '');
+
+  const { data, isError, isLoading } = useFetcher(`/payments?requestUserId=51&page=1&size=63&searchBy=&startDate=${startDate}&endDate=${endDate}`);
 
   const [page, setPage] = useState(0);
 
@@ -102,14 +108,14 @@ const PaymentsPage = ({
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [state, setState] = useState(initState);
-
-  console.log(data);
    
   useEffect(() => {
       if (data?.data?.length) {
           getUsers({ payments: data?.data });
       }
-  }, [data?.data?.length]);
+  }, [data?.data?.length, startDate, endDate]);
+
+  console.log("payments", payments);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -257,6 +263,44 @@ const PaymentsPage = ({
     );
   };
 
+  const exportExcel = () => {
+    const paymentsData = payments.map(
+      ({ date, district, cnt, amount, supervisorName, supervisorNumber }) => {
+        return {
+          Date: date,
+          District: district,
+          Count: cnt,
+          Amount: amount,
+          'Supervisor Name': supervisorName,
+          'Supervisor Number': supervisorNumber,
+        };
+      }
+    );
+  
+    const worksheet = XLSX.utils.json_to_sheet(paymentsData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Payments');
+  
+    const excelBuffer = XLSX.write(workbook, { type: 'array', bookType: 'xlsx' });
+  
+    const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const fileName = 'Payments Report.xlsx';
+  
+    if (typeof window.navigator.msSaveBlob !== 'undefined') {
+      // For IE11 and Edge
+      window.navigator.msSaveBlob(blob, fileName);
+    } else {
+      // For modern browsers
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      link.click();
+      window.URL.revokeObjectURL(url);
+    }
+  };
+  
+
 
   return (
     <>
@@ -272,6 +316,54 @@ const PaymentsPage = ({
           </Typography>
         </Stack>
 
+        <Card style={{
+          boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+          padding: "20px",
+          textAlign: "center",
+          marginBottom: "20px"
+        }}>
+          <Typography variant="p" gutterBottom sx={{ pt: 3, pl: 3, fontWeight: 'bold' }}>
+            Total transactions made : { data?.totalTx}
+          </Typography>
+          <Typography variant="p" gutterBottom sx={{ pt: 3, pl: 3, fontWeight: 'bold' }}>
+            |
+          </Typography>
+          <Typography variant="p" gutterBottom sx={{ pt: 3, pl: 3, fontWeight: 'bold' }}>
+            Total amount collected : { data?.totalAmount} Rwf
+          </Typography>
+        </Card>
+
+        <Card style={{
+          padding: "20px",
+          textAlign: "center",
+          boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+          marginBottom: "20px",
+          display: "flex",
+          justifyContent: "center",
+          gap: "50px"
+        }}>
+           <Typography variant="p"  gutterBottom sx={{ pt: 3, pl: 3, fontWeight: 'bold', textAlign: 'center', }}>
+            Filter by date:
+          </Typography>
+          <DatePickerValue
+            label="From"
+            value={startDate}
+            onChange={(date) => {
+              setStartDate(dayjs(date).format('YYYY-MM-DD'))
+              localStorage.setItem("startDate", dayjs(date).format('YYYY-MM-DD'))
+          }}
+          />
+          <DatePickerValue
+            label="To"
+            value={endDate}
+            onChange={(date) => {
+              setEndDate(dayjs(date).format('YYYY-MM-DD'))
+              localStorage.setItem("endDate", dayjs(date).format('YYYY-MM-DD'))
+              window.location.reload();
+            }}
+          />
+        </Card>
+
         <Card
         style={{
           boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
@@ -285,15 +377,12 @@ const PaymentsPage = ({
             }
             isEmpty={!isError && !isLoading && !payments?.length}
           >
-            <Typography variant="h3" gutterBottom sx={{ pt: 3, pl: 3 }}>
-            Total Payments made : { data?.recordsTotal}
-          </Typography>
+          
             <UserListToolbar
               numSelected={selected.length}
               filterName={filterName}
               onFilterName={handleFilterByName}
             />
-
             <Scrollbar>
               <TableContainer sx={{ minWidth: 800, overflowX: 'hidden' }}>
                 <Table>
@@ -306,6 +395,7 @@ const PaymentsPage = ({
                     onRequestSort={handleRequestSort}
                     onSelectAllClick={handleSelectAllClick}
                   />
+            
                   <TableBody>
                     {filteredUsers
                       .slice(
@@ -380,6 +470,9 @@ const PaymentsPage = ({
             />
            <Button variant="contained" onClick={exportPDF} sx={{ marginBottom : 5, marginLeft : 5 }}>
               Export as PDF
+           </Button>
+           <Button variant="outlined" onClick={exportExcel} sx={{ marginBottom : 5, marginLeft : 5 }}>
+              Export as Excel
            </Button>
           </DataWidget>
         </Card>
