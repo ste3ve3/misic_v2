@@ -41,9 +41,9 @@ const TABLE_HEAD = [
   { id: 'date', label: 'Date', alignRight: false },
   { id: 'district', label: 'District', alignRight: false },
   { id: 'cnt', label: 'Count', alignRight: false },
-  { id: 'amount', label: 'Amount', alignRight: false },
-  { id: 'supervisorName', label: 'Supervisor Name', alignRight: false },
-  { id: 'supervisorNumber', label: 'Supervisor Number', alignRight: false }
+  { id: 'amount', label: 'Amount', alignCenter: true },
+  { id: 'supervisorName', label: 'Supervisor Name', alignCenter: true },
+  { id: 'supervisorNumber', label: 'Supervisor Number', alignCenter: true }
 ];
 
 // ----------------------------------------------------------------------
@@ -300,7 +300,7 @@ const PaymentsPage = ({
     }
   };
   
-
+  const formattedAmount = data?.totalAmount.toLocaleString('en-RW');
 
   return (
     <>
@@ -320,16 +320,18 @@ const PaymentsPage = ({
           boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
           padding: "20px",
           textAlign: "center",
+          display: "flex",
+          justifyContent: "center",
           marginBottom: "20px"
         }}>
-          <Typography variant="p" gutterBottom sx={{ pt: 3, pl: 3, fontWeight: 'bold' }}>
+          <Typography variant="h4" gutterBottom sx={{ pt: 3, pl: 3, fontWeight: 'bold' }}>
             Total transactions made : { data?.totalTx}
           </Typography>
-          <Typography variant="p" gutterBottom sx={{ pt: 3, pl: 3, fontWeight: 'bold' }}>
+          <Typography variant="h4" gutterBottom sx={{ pt: 3, pl: 3, fontWeight: 'bold' }}>
             |
           </Typography>
-          <Typography variant="p" gutterBottom sx={{ pt: 3, pl: 3, fontWeight: 'bold' }}>
-            Total amount collected : { data?.totalAmount} Rwf
+          <Typography variant="h4" gutterBottom sx={{ pt: 3, pl: 3, fontWeight: 'bold' }}>
+            Total amount collected : {formattedAmount} Rwf
           </Typography>
         </Card>
 

@@ -31,10 +31,7 @@ import {
           selected={selectedUser}
         >
           <TableCell padding="checkbox">
-            <Checkbox
-              checked={selectedUser}
-              onChange={onCheckBoxClicked}
-            />
+
           </TableCell>
   
           <TableCell component="th" scope="row" padding="none">

@@ -37,34 +37,31 @@ const FirebaseLogin = ({ ...others }) => {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
+
     const handleNormalLogin = async (e) => {
         e.preventDefault();
         setState(initState);
         try {
-          setState((prev) => ({ ...prev, loading: true }));
-      
-          let response;
+            setState((prev) => ({ ...prev, loading: true }));
+            const LoginFormData = new URLSearchParams();
+                LoginFormData.append('phoneNumber', formData.phoneNumber);
+                LoginFormData.append('password', formData.password);
 
-          if (formData.phoneNumber !== '0788312609' || formData.password !== 'test123') {
-            throw new Error('Invalid Credentials');
-          } else {
-            response = 
-            response = await new Promise((resolve) => {
-                setTimeout(() => {
-                  resolve({ data: { userId: 1, fname: 'Christian', otherNames: 'Mugisha', role: 'top' } });
-                }, 2000);
-              });
-          }
-      
-          await toast.promise(
-            Promise.resolve(),
-            {
-              loading: `Checking credentials, please wait...`,
-              success: `Logged In Successfully!`,
-              error: `Invalid Credentials!`
-            },
-            { position: 'top-center' }
-          );
+                const config = {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            };
+
+            const response = await toast.promise(
+                    API.post(`/formlogin`, LoginFormData.toString(), config),
+                    {
+                        loading: `Checking credentials, please wait...`,
+                        success: `Logged In Successfully!`,
+                        error: `Login was unsuccessfull!`
+                    },
+                    { position: 'top-center' }
+                );
       
           const userData = {
             id: response.data?.userId,
