@@ -3,7 +3,7 @@ import useSWR from 'swr';
 const token = localStorage.getItem("token") ?? "";
 
 export const API = axios.create({
-    baseURL: process.env.REACT_APP_BASE_URL,
+    baseURL: "https://member.engineersrwanda.rw",
     headers : {
         "Content-Type": "application/json",
         Authorization: "Bearer " + token,
