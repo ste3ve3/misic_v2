@@ -83,7 +83,8 @@ const Login3 = () => {
         const imageWrapperRect = event.currentTarget.getBoundingClientRect();
         const relativeX = event.clientX - imageWrapperRect.left;
         const relativeY = event.clientY - imageWrapperRect.top;
-      
+        console.log(relativeX);
+        console.log(relativeY);
         if (currentClick === 1) {
           setXStartCoordinatesField1(relativeX);
           setYStartCoordinatesField1(relativeY);
@@ -130,7 +131,6 @@ const Login3 = () => {
     return (
         <div>
             <img 
-              width="100%"
               src={base64String}
               onDoubleClick={handleImageDoubleClick}
             />
