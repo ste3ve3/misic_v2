@@ -101,7 +101,7 @@ const Login3 = () => {
             fontStyle: "normal",
             textAlign: "left",
             width: Math.round(width1),
-            breadth: 50,
+            breadth: selectedField =="photo" ? 300 : 50,
           };
 
           setSubmittedData(prevSubmittedData => ({
