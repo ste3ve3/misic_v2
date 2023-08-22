@@ -101,7 +101,7 @@ const Login3 = () => {
             fontStyle: "normal",
             textAlign: "left",
             width: Math.round(width1),
-            breadth: 300,
+            breadth: 30,
           };
 
           setSubmittedData(prevSubmittedData => ({
