@@ -91,8 +91,8 @@ const Login3 = () => {
       
           const updatedParam = {
             paramName: selectedField,
-            xCoordinate: Math.round(relativeX * 2),
-            yCoordinate: Math.round(relativeY * 2), 
+            xCoordinate: Math.round((relativeX * 2) + 225),
+            yCoordinate: Math.round((relativeY * 2) + 105), 
             color: "ffaa00",
             font: "New Roman",
             fontBold: "public/fonts/Alegreya_Sans/AlegreyaSans-Bold.ttf",
