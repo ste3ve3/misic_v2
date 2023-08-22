@@ -91,7 +91,7 @@ const Login3 = () => {
           const updatedParam = {
             paramName: selectedField,
             xCoordinate: Math.round(relativeX * 2),
-            yCoordinate: Math.round(relativeY * 2), 
+            yCoordinate: Math.round((relativeY * 2) - 50), 
             color: "ffaa00",
             font: "New Roman",
             fontBold: "public/fonts/Alegreya_Sans/AlegreyaSans-Bold.ttf",
@@ -101,7 +101,7 @@ const Login3 = () => {
             fontStyle: "normal",
             textAlign: "left",
             width: Math.round(width1),
-            breadth: 30,
+            breadth: 50,
           };
 
           setSubmittedData(prevSubmittedData => ({
