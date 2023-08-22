@@ -83,8 +83,6 @@ const Login3 = () => {
         const imageWrapperRect = event.currentTarget.getBoundingClientRect();
         const relativeX = event.clientX - imageWrapperRect.left;
         const relativeY = event.clientY - imageWrapperRect.top;
-        console.log(relativeX);
-        console.log(relativeY);
         if (currentClick === 1) {
           setXStartCoordinatesField1(relativeX);
           setYStartCoordinatesField1(relativeY);
@@ -92,8 +90,8 @@ const Login3 = () => {
       
           const updatedParam = {
             paramName: selectedField,
-            xCoordinate: Math.round((relativeX * 2) + 225),
-            yCoordinate: Math.round((relativeY * 2) + 105), 
+            xCoordinate: Math.round((relativeX * 2)),
+            yCoordinate: Math.round((relativeY * 2)), 
             color: "ffaa00",
             font: "New Roman",
             fontBold: "public/fonts/Alegreya_Sans/AlegreyaSans-Bold.ttf",
@@ -102,7 +100,7 @@ const Login3 = () => {
             fontSize: 30,
             fontStyle: "normal",
             textAlign: "left",
-            width: width1,
+            width: Math.round(width1),
             breadth: 300,
           };
 
